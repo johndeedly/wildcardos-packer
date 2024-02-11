@@ -1,0 +1,9 @@
+Package: vim-dummy
+Version: 1
+Architecture: all
+Conflicts: vi, vim, gvim
+Breaks: vi, vim, gvim
+Provides: vi (= 65535:65535), vim (= 65535:65535), gvim (= 65535:65535)
+Description: vim dummy package - no vim!
+Maintainer: vim-dummy
+Homepage: http://0.0.0.0/vim-dummy

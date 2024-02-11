@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+case "$1" in
+    configure)
+        [ -L /usr/bin/vi ] && rm /usr/bin/vi
+        [ -L /usr/bin/vim ] && rm /usr/bin/vim
+        [ -L /usr/bin/gvim ] && rm /usr/bin/gvim
+        ln -s /usr/bin/nvim /usr/bin/vi
+        ln -s /usr/bin/nvim /usr/bin/vim
+        ln -s /usr/bin/nvim /usr/bin/gvim
+    ;;
+esac

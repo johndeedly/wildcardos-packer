@@ -1,0 +1,9 @@
+Package: sudo-dummy
+Version: 1
+Architecture: all
+Conflicts: sudo
+Breaks: sudo
+Provides: sudo (= 65535:65535)
+Description: sudo dummy package - no sudo!
+Maintainer: sudo-dummy
+Homepage: http://0.0.0.0/sudo-dummy

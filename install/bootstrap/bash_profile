@@ -1,0 +1,7 @@
+#
+# ~/.bash_profile
+#
+
+[[ -f /etc/bash.bashrc ]] && source /etc/bash.bashrc
+
+[[ -f ~/.bashrc ]] && source ~/.bashrc

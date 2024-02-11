@@ -1,0 +1,9 @@
+Package: fake-ubuntu-advantage-tools
+Version: 1
+Architecture: all
+Conflicts: ubuntu-advantage-tools, ubuntu-advantage-desktop-daemon
+Breaks: ubuntu-advantage-tools, ubuntu-advantage-desktop-daemon
+Provides: ubuntu-advantage-tools (= 65535:65535), ubuntu-advantage-desktop-daemon (= 65535:65535)
+Description: Ban ubuntu-advantage-tools while satisfying ubuntu-minimal dependency
+Maintainer: fake-ubuntu-advantage-tools
+Homepage: http://0.0.0.0/fake-ubuntu-advantage-tools

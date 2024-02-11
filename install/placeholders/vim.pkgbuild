@@ -1,0 +1,15 @@
+pkgname='vim-dummy'
+pkgver=1
+pkgrel=1
+pkgdesc='vim dummy package - no vim!'
+arch=(any)
+provides=('vi' 'vim' 'gvim')
+replaces=('vi' 'vim' 'gvim')
+conflicts=('vi' 'vim' 'gvim')
+
+package() {
+    mkdir -p "${pkgdir}/usr/bin"
+    ln -s /usr/bin/nvim "${pkgdir}/usr/bin/vi"
+    ln -s /usr/bin/nvim "${pkgdir}/usr/bin/vim"
+    ln -s /usr/bin/nvim "${pkgdir}/usr/bin/gvim"
+}

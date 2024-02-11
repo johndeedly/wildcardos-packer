@@ -1,0 +1,39 @@
+#cloud-config
+
+### allow packer to connect to archiso livecd via ssh as root user
+ssh_pwauth: true
+chpasswd:
+  expire: false
+  users:
+    - name: root
+      password: packer-build-passwd
+      type: text
+
+### first command to execute in cloud-init execution order
+bootcmd:
+  # stop and disable reflector to be able to change the pacman mirrorlist
+  - [ systemctl, stop, reflector.service, reflector.timer ]
+  - [ systemctl, disable, reflector.service, reflector.timer ]
+
+### second command to execute in cloud-init execution order
+write_files:
+  # time travel the repositories back to the build day of the iso
+  # the path year/month/day is resolved and modified through pipeline.ps1
+  - path: /etc/pacman.d/mirrorlist
+    content: |
+      Server=https://archive.archlinux.org/repos/2024/02/01/$repo/os/$arch
+    owner: 'root:root'
+    permissions: '0644'
+  # enable german keyboard
+  - path: /etc/vconsole.conf
+    content: |
+      KEYMAP=de-latin1
+      XKBLAYOUT=de
+      XKBMODEL=pc105
+    owner: 'root:root'
+    permissions: '0644'
+
+### third command to execute in cloud-init execution order
+runcmd:
+  # load the german keyboard layout for the current session
+  - [ loadkeys, de-latin1 ]

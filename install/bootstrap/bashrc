@@ -1,0 +1,279 @@
+#
+# ~/.bashrc
+#
+
+# general global definitions
+export EDITOR=nano
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export WINEPREFIX="$HOME/.local/wine"
+export WINEDEBUG=fixme-all,warn-all,err-all
+
+# append dotnet tools to user paths
+if ! [[ "$PATH" =~ ":$HOME/.dotnet/tools" ]]; then
+  export PATH="$PATH:$HOME/.dotnet/tools"
+fi
+
+# append local bin to user paths
+if ! [[ "$PATH" =~ ":$HOME/.local/bin" ]]; then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
+# append sbin to user paths
+if ! [[ "$PATH" =~ ":/usr/sbin" ]]; then
+  export PATH="$PATH:/usr/sbin"
+fi
+
+# append local sbin to user paths
+if ! [[ "$PATH" =~ ":/usr/local/sbin" ]]; then
+  export PATH="$PATH:/usr/local/sbin"
+fi
+
+# include XDG homedirs
+if [ -f "$HOME/.config/user-dirs.dirs" ]; then
+  source "$HOME/.config/user-dirs.dirs"
+fi
+
+# install/update/build AUR package(s)
+function installaurdeps() {
+  local TMPPKG=$(mktemp)
+  echo "install dependencies for $@"
+  while (( "$#" )); do
+    curl -sL "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=$1" > "${TMPPKG}"
+    grep -e 'depends' "${TMPPKG}" && (
+      unset depends
+      unset makedepends
+      unset checkdepends
+      source "${TMPPKG}"
+      ALLDEPENDS=("${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}")
+      for pkg in "${ALLDEPENDS[@]}"; do
+        if [ ! -z "${pkg}" ]; then
+          pacman -S --needed --noconfirm --asdeps --color=auto "${pkg}" || true
+        fi
+      done
+    ) || echo 1>&2 "no dependencies parsed for $1"
+    shift
+  done
+  /usr/bin/rm "${TMPPKG}"
+}
+
+function aur() {
+  local BUILD=1
+  local TMPARR=()
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+      -b|--buildonly)
+        BUILD=0
+        echo "build only option enabled"
+        shift
+        ;;
+      *)
+        TMPARR+=("$1") # save it in an array for later
+        shift # past argument
+        ;;
+    esac
+  done
+  set -- "${TMPARR[@]}"
+
+  [[ -d "$HOME/.local/build" ]] || mkdir "$HOME/.local/build"
+  while (( "$#" )); do
+    if [[ $(git ls-remote "https://aur.archlinux.org/$1.git" | wc -l) -gt 0 ]]; then
+      installaurdeps "$1"
+      git clone "https://aur.archlinux.org/$1.git" "$HOME/.local/build/$1.aur" || true
+      pushd "$HOME/.local/build/$1.aur"
+        git config user.name ""
+        git config user.email ""
+        git pull --no-rebase || true
+        git submodule update --init --recursive || true
+		    (. PKGBUILD; sudo pacman -S --needed --noconfirm --asdeps --color=auto ${makedepends[@]} ${depends[@]} || true)
+        if [ $BUILD -eq 0 ]; then
+          makepkg -s
+        else
+          makepkg -si --needed --noconfirm
+        fi
+      popd
+    else
+      echo "AUR package $1 not found."
+    fi
+    shift
+  done
+}
+export -f aur
+
+function wgup() {
+  local username=$(id -un)
+  sudo ip link add dev wg0 type wireguard
+  sudo ip addr add 10.0.0.1/24 dev wg0
+  sudo ip addr add fdc9:281f:04d7:9ee9::1/64 dev wg0
+  sudo wg set wg0 listen-port 51641 private-key $HOME/.wg/$username.key
+  sudo wg
+  sudo ufw allow 51641/udp
+  sudo ufw status
+}
+export -f wgup
+
+function wgdown() {
+  sudo ip link del wg0
+  sudo wg
+  sudo ufw delete allow 51641/udp
+  sudo ufw status
+}
+export -f wgdown
+
+function anyupdates() {
+  local username=$(id -un)
+  local tmppath="/tmp/checkup-db-$username"
+  local dbpath="$(pacman-conf DBPath)"
+
+  mkdir -p "$tmppath"
+  ln -s "$dbpath/local" "$tmppath" &>/dev/null
+  fakeroot -- pacman -Syy --dbpath "$tmppath" --color=auto --logfile /dev/null &>/dev/null
+  pacman -Qu --dbpath "$tmppath" --color=auto 2>/dev/null
+}
+export -f anyupdates
+
+function fasthash() {
+  if test -n "$1"; then
+    # parameter(s) given
+    while (( "$#" )); do
+      if [ -d "$1" ]; then
+        # is directory
+        echo -e "$(find "$1" -type f -xtype f -print0 \
+          | sort -z | xargs -0 -I {} pv {} | gzip -c \
+          | tail -c8 | od -t x4 -N 4 -A n \
+          | xargs)\t$(realpath "$1")/*"
+      elif [ -f "$1" ]; then
+        # is file
+        echo -e "$(pv "$1" \
+          | gzip -c | tail -c8 | od -t x4 -N 4 -A n \
+          | xargs)\t$(realpath "$1")"
+      else
+        # is string
+        echo -e "$(echo -en "$1" \
+          | gzip -c | tail -c8 | od -t x4 -N 4 -A n \
+          | xargs)\t\"$(printf "%q" "$1")\""
+      fi
+      shift
+    done
+  elif test ! -t 0; then
+    # read from stdin
+    echo -e "$(cat - | pv \
+      | gzip -c | tail -c8 | od -t x4 -N 4 -A n \
+      | xargs)\t-"
+  else
+    echo "no data" 1>&2
+  fi
+}
+export -f fasthash
+
+# configure completion for doas
+complete -F _root_command doas
+complete -F _longopt ls
+complete -F _longopt ll
+complete -F _longopt la
+complete -F _longopt diff
+complete -F _longopt grep
+complete -F _longopt trash
+complete -F _longopt trashdir
+complete -F _longopt du
+complete -F _longopt ncdu
+
+# alias and color stuff
+function ls() {
+    command ls --color=auto "$@"
+}
+export -f ls
+
+function ll() {
+    command ls -l --color=auto "$@"
+}
+export -f ll
+
+function la() {
+    command ls -la --color=auto "$@"
+}
+export -f la
+
+function diff() {
+    command diff --color=auto "$@"
+}
+export -f diff
+
+function grep() {
+    command grep --color=auto "$@"
+}
+export -f grep
+
+function ip() {
+    command ip -color=auto "$@"
+}
+export -f ip
+
+function trash() {
+    command rmtrash "$@"
+}
+export -f trash
+
+function trashdir() {
+    command rmtrash -r "$@"
+}
+export -f trashdir
+
+function newpasswd() {
+    command xkcdpass -w /usr/share/dict/ogerman -n 4 -c 8 --min 4 --max 8 "$@"
+}
+export -f newpasswd
+
+function cifscopy() {
+    command rsync -rtvus --size-only --stats --no-links --progress "$@"
+}
+export -f cifscopy
+
+function du() {
+    command ncdu "$@"
+}
+export -f du
+
+# python pip redirect to local user repository at all times
+# no venv's needed
+function pip() {
+  local cmd="$1"
+  case $cmd in
+    install)
+      shift
+      echo 1>&2 "[#] python -m pip $cmd --user --break-system-packages $@"
+      command python -m pip "$cmd" --user --break-system-packages "$@"
+      ;;
+    freeze|inspect|list)
+      shift
+      echo 1>&2 "[#] python -m pip $cmd --user $@"
+      command python -m pip "$cmd" --user "$@"
+      ;;
+    *)
+      command python -m pip "$@"
+      ;;
+  esac
+}
+export -f pip
+
+function python() {
+  if [[ $@ == "-m pip "* ]]; then
+    shift
+    shift
+    pip "$@"
+  else
+    command python "$@"
+  fi
+}
+export -f python
+
+# using starship when supported
+if [[ "${TERM}" =~ "xterm" ]] || [[ "${TERM}" =~ "linux" ]] || [[ "${TERM}" =~ "kitty" ]]; then
+  eval "$(starship init bash)"
+else
+  if [[ $(id -u) -eq 0 ]]; then
+    PS1='${?#0}\[\e[;31m\][\u@\h \W]\$\[\e[m\] '
+  else
+    PS1='${?#0}\[\e[;32m\][\u@\h \W]\$\[\e[m\] '
+  fi
+fi

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+[ -e /boot/vmlinuz ] && rm /boot/vmlinuz
+cp $(ls -t -1 /boot/vmlinuz-* | head -1) /boot/vmlinuz
+[ -e /boot/initrd.img ] && rm /boot/initrd.img
+cp $(ls -t -1 /boot/initrd.img-* | head -1) /boot/initrd.img

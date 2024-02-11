@@ -1,0 +1,13 @@
+pkgname='sudo-dummy'
+pkgver=1
+pkgrel=1
+pkgdesc='sudo dummy package - no sudo!'
+arch=(any)
+provides=('sudo')
+replaces=('sudo')
+conflicts=('sudo')
+
+package() {
+    mkdir -p "${pkgdir}/usr/bin"
+    ln -s /usr/bin/doas "${pkgdir}/usr/bin/sudo"
+}

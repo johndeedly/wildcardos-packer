@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+[ -L /usr/bin/vi ] && rm /usr/bin/vi
+[ -L /usr/bin/vim ] && rm /usr/bin/vim
+[ -L /usr/bin/gvim ] && rm /usr/bin/gvim

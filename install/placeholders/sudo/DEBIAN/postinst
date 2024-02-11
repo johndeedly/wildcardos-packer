@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+case "$1" in
+    configure)
+        [ -L /usr/bin/sudo ] && rm /usr/bin/sudo
+        ln -s /usr/bin/doas /usr/bin/sudo
+    ;;
+esac
