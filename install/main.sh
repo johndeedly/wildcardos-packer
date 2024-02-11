@@ -133,6 +133,12 @@ EOF
 done)
 bash "${SCRIPTDIR}/nspawn-chroot.sh" ${MOUNTPOINT%%/} <"${SCRIPTDIR}/main_nspawn.sh"
 
+log_text "Filesystem services"
+source "${SCRIPTDIR}/filesystem_services/main.sh"
+
+log_text "Install system drivers"
+source "${SCRIPTDIR}/drivers/main.sh"
+
 log_text "Finalize archiso environment"
 if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" ]]; then
     source "${SCRIPTDIR}/systemd_boot/main.sh"
