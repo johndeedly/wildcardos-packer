@@ -58,6 +58,6 @@ fi
 
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
     log_text "Install virtual machine drivers"
-    pacman_whenneeded virtualbox-guest-utils qemu-guest-agent
+    pacman_whenneeded virtualbox-guest-utils-nox qemu-guest-agent
     systemctl enable vboxservice
 fi

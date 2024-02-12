@@ -24,21 +24,27 @@ function archiso_pacman_whenneeded() {
 if [[ ${TAGS[@]} =~ "archlinux" ]]; then
     function pacman_whenneeded() {
         log_text "Install packages ${*// /,}"
-        pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
     }
     function pacman_package_whenneeded() {
         log_text "Install packages ${*// /,}"
-        pacman -U --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C pacman -U --noconfirm --needed --noprogressbar --color=auto $*
     }
 elif [[ ${TAGS[@]} =~ "ubuntu" ]]; then
     function pacman_whenneeded() {
         log_text "Install packages ${*// /,}"
-        eatmydata apt -y install $*
+        if ! [[ "$PATH" =~ "/usr/sbin" ]]; then
+            PATH="$PATH:/usr/local/sbin:/usr/sbin"
+        fi
+        DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
         sync
     }
     function pacman_package_whenneeded() {
         log_text "Install packages ${*// /,}"
-        eatmydata apt -y install $*
+        if ! [[ "$PATH" =~ "/usr/sbin" ]]; then
+            PATH="$PATH:/usr/local/sbin:/usr/sbin"
+        fi
+        DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
         sync
     }
 elif [[ ${TAGS[@]} =~ "rockylinux" ]]; then
