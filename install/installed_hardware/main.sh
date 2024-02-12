@@ -31,11 +31,11 @@ ORACLE_HITS=$(echo ${LSHW} | xmllint --xpath 'count(//vendor[contains(.,"Oracle"
 
 log_text "Store results in variables"
 INSTALLED_HARDWARE_WIRELESS=""
-if [ $WIRELESS_HITS -gt 0 ]; then
+if [ $WIRELESS_HITS -gt 0 ] || [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     INSTALLED_HARDWARE_WIRELESS="YES"
 fi
 INSTALLED_HARDWARE_BLUETOOTH=""
-if [ $BLUETOOTH_HITS -gt 0 ]; then
+if [ $BLUETOOTH_HITS -gt 0 ] || [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     INSTALLED_HARDWARE_BLUETOOTH="YES"
 fi
 INSTALLED_HARDWARE_CPU_VENDORS=()
@@ -51,7 +51,7 @@ if [ "x${GPU_HITS[@]}" != "x" ]; then
     done
 fi
 INSTALLED_HARDWARE_VIRTUAL_MACHINE=""
-if [ $QEMU_HITS -gt 0 ] || [ $VMWARE_HITS -gt 0 ] || [ $ORACLE_HITS -gt 0 ]; then
+if [ $QEMU_HITS -gt 0 ] || [ $VMWARE_HITS -gt 0 ] || [ $ORACLE_HITS -gt 0 ] || [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     INSTALLED_HARDWARE_VIRTUAL_MACHINE="YES"
 fi
 INSTALLED_HARDWARE_CPU_AMD=""
