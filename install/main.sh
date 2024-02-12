@@ -143,3 +143,8 @@ log_text "Finalize archiso environment"
 if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" ]]; then
     source "${SCRIPTDIR}/systemd_boot/main.sh"
 fi
+
+log_text "Requested building of squashfs image"
+if [[ ${TAGS[@]} =~ "pxeimage" ]]; then
+    source "${SCRIPTDIR}/pxeimage/main.sh"
+fi
