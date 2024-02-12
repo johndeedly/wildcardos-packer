@@ -4,6 +4,8 @@ Param(
     [Parameter(Mandatory=$False)]
     [switch]$PxeBoot,
     [Parameter(Mandatory=$False)]
+    [switch]$PxeImage,
+    [Parameter(Mandatory=$False)]
     [switch]$VerboseOutput,
     [Parameter(Mandatory=$False)]
     [switch]$DualBoot,
@@ -48,6 +50,22 @@ if ($DualBoot) {
 if ($Encryption) {
 	Write-Host ":: Encryption enabled"
 	$env:PKR_VAR_encryption = "true"
+}
+if ($PxeBoot) {
+	if ($Archlinux) {
+		Write-Host ":: Pxe boot enabled"
+		$env:PKR_VAR_pxeboot = "true"
+	} else {
+		Write-Host ":: Pxe boot on ubuntu nor rockylinux is supported"
+	}
+}
+if ($PxeImage) {
+	if ($Archlinux) {
+		Write-Host ":: Pxe image generation enabled"
+		$env:PKR_VAR_pxeimage = "true"
+	} else {
+		Write-Host ":: Pxe image on ubuntu nor rockylinux is supported"
+	}
 }
 Write-Host ":: Stage name is $($StageName)"
 $env:PKR_VAR_stage = "$($StageName)"

@@ -63,7 +63,12 @@ variable "headless" {
   default = true
 }
 
-variable "pxe" {
+variable "pxeboot" {
+  type    = bool
+  default = false
+}
+
+variable "pxeimage" {
   type    = bool
   default = false
 }
@@ -230,7 +235,7 @@ build {
     inline = [
       "pushd /install",
       "  chmod a+x main.sh",
-      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${join(",", var.configuration)}'",
+      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
       "popd"
     ]
   }

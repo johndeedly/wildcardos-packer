@@ -40,3 +40,7 @@ source "${SCRIPTDIR}/placeholders/main.sh"
 if [[ ${TAGS[@]} =~ "bootstrap" ]]; then
   source "${SCRIPTDIR}/bootstrap/main.sh"
 fi
+
+if [[ ${TAGS[@]} =~ "pxeboot" ]]; then
+  source "${SCRIPTDIR}/pxeboot/main.sh"
+fi
