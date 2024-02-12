@@ -24,6 +24,15 @@ fi
 if [ -n "$INSTALLED_HARDWARE_CPU_INTEL" ]; then
     PACKAGE_LIST+=( intel-ucode )
 fi
+if [ -n $INSTALLED_HARDWARE_WIRELESS ]; then
+    PACKAGE_LIST+=( iwd iw )
+fi
+if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
+    PACKAGE_LIST+=( bluez bluez-utils bluez-plugins )
+fi
+if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
+    PACKAGE_LIST+=( virtualbox-guest-utils-nox qemu-guest-agent )
+fi
 
 log_text "Create a basic system inside the mountpoint folder"
 pacstrap -K -M -c ${MOUNTPOINT%%/} ${PACKAGE_LIST[@]}

@@ -53,7 +53,3 @@ if [ -n "$VERBOSE" ]; then
   echo -en "daily user: ${USERID}|${USERGRP}|${USERHOME}\n"
   echo -en "temp user:  ${TEMPID}|${TEMPGRP}|${TEMPHOME}\n"
 fi
-
-log_text "Set default shell for the system to bash"
-rm /bin/sh
-ln -s bash /bin/sh

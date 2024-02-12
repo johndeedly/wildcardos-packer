@@ -37,6 +37,9 @@ source "${SCRIPTDIR}/package_manager/main.sh"
 log_text "Install and configure placeholders"
 source "${SCRIPTDIR}/placeholders/main.sh"
 
+log_text "Configure system drivers"
+source "${SCRIPTDIR}/drivers/main.sh"
+
 if [[ ${TAGS[@]} =~ "bootstrap" ]]; then
   source "${SCRIPTDIR}/bootstrap/main.sh"
 fi

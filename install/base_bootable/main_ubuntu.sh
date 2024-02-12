@@ -40,6 +40,15 @@ fi
 if [ -n "$INSTALLED_HARDWARE_CPU_INTEL" ]; then
     PACKAGE_LIST+=( intel-microcode )
 fi
+if [ -n $INSTALLED_HARDWARE_WIRELESS ]; then
+    PACKAGE_LIST+=( iwd iw )
+fi
+if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
+    PACKAGE_LIST+=( bluez bluez-tools )
+fi
+if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
+    PACKAGE_LIST+=( virtualbox-guest-utils qemu-guest-agent )
+fi
 
 log_text "Configure kernel image creation without symlinks in boot"
 mkdir -p ${MOUNTPOINT%%/}/etc

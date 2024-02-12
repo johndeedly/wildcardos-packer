@@ -25,3 +25,17 @@ log_text "Configure wait online service to wait for only one network to be onlin
 mkdir -p ${MOUNTPOINT%%/}/etc/systemd/system/systemd-networkd-wait-online.service.d
 cp "${SCRIPTDIR}/base_bootable/wait-online-any.conf" \
   ${MOUNTPOINT%%/}/etc/systemd/system/systemd-networkd-wait-online.service.d/
+
+log_text "Set default shell for the system to bash"
+rm ${MOUNTPOINT%%/}/bin/sh
+ln -s bash ${MOUNTPOINT%%/}/bin/sh
+
+log_text "Create minimal bash profile and bashrc to have path set"
+mkdir -p ${MOUNTPOINT%%/}/etc/skel ${MOUNTPOINT%%/}/root
+tee -a ${MOUNTPOINT%%/}/etc/skel/.bash_profile \
+    ${MOUNTPOINT%%/}/etc/skel/.bashrc \
+    ${MOUNTPOINT%%/}/root/.bash_profile \
+    ${MOUNTPOINT%%/}/root/.bashrc <<EOF
+TERM=linux
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:~/.local/.bin
+EOF

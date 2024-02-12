@@ -18,34 +18,26 @@ function log_error() {
 
 function archiso_pacman_whenneeded() {
     log_text "Install packages ${*// /,}"
-    pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
+    /usr/bin/pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
 }
 
 if [[ ${TAGS[@]} =~ "archlinux" ]]; then
     function pacman_whenneeded() {
         log_text "Install packages ${*// /,}"
-        yes | LC_ALL=C pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C /usr/bin/pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
     }
     function pacman_package_whenneeded() {
         log_text "Install packages ${*// /,}"
-        yes | LC_ALL=C pacman -U --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C /usr/bin/pacman -U --noconfirm --needed --noprogressbar --color=auto $*
     }
 elif [[ ${TAGS[@]} =~ "ubuntu" ]]; then
     function pacman_whenneeded() {
         log_text "Install packages ${*// /,}"
-        if ! [[ "$PATH" =~ "/usr/sbin" ]]; then
-            PATH="$PATH:/usr/local/sbin:/usr/sbin"
-        fi
         DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
-        sync
     }
     function pacman_package_whenneeded() {
         log_text "Install packages ${*// /,}"
-        if ! [[ "$PATH" =~ "/usr/sbin" ]]; then
-            PATH="$PATH:/usr/local/sbin:/usr/sbin"
-        fi
         DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
-        sync
     }
 elif [[ ${TAGS[@]} =~ "rockylinux" ]]; then
     function pacman_whenneeded() {
