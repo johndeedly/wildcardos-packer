@@ -5,6 +5,11 @@ REPO_VERSION=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; e
 wget "https://packages.microsoft.com/config/ubuntu/$REPO_VERSION/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
 dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
+
+log_text "Add ppa source for neovim"
+add-apt-repository ppa:neovim-ppa/stable -y
+
+log_text "Update package cache"
 apt update
 
 log_text "Install and configure base packages needed for everything else"

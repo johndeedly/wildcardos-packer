@@ -12,6 +12,8 @@ PACKAGE_LIST=(
     curl
     wget
     zstd
+    # package for add-apt-repository command
+    software-properties-common
     # systemd base
     dbus-broker
     systemd
