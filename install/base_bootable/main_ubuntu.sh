@@ -47,7 +47,7 @@ if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
     PACKAGE_LIST+=( bluez bluez-tools )
 fi
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
-    PACKAGE_LIST+=( virtualbox-guest-additions-iso qemu-guest-agent )
+    PACKAGE_LIST+=( virtualbox-guest-utils qemu-guest-agent )
 fi
 
 log_text "Configure kernel image creation without symlinks in boot"
@@ -85,5 +85,5 @@ if [ ! -e /usr/share/debootstrap/scripts/${UBUNTU_RELEASE} ]; then
     # all newer releases softlink to gutsy, so we try the same
     ln -s gutsy /usr/share/debootstrap/scripts/${UBUNTU_RELEASE}
 fi
-eatmydata debootstrap --include=$(echo -en "${PACKAGE_LIST[@]}" | tr ' ' ',') --components=main,universe ${UBUNTU_RELEASE} ${MOUNTPOINT%%/} https://ftp.halifax.rwth-aachen.de/ubuntu
+eatmydata debootstrap --include=$(echo -en "${PACKAGE_LIST[@]}" | tr ' ' ',') --components=main,universe,multiverse ${UBUNTU_RELEASE} ${MOUNTPOINT%%/} https://ftp.halifax.rwth-aachen.de/ubuntu
 sync
