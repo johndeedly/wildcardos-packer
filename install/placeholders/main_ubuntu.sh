@@ -15,6 +15,9 @@ rm -rf "${TEMPHOME}"/sudo/ "${TEMPHOME}"/sudo-dummy.deb
 log_text "Create symlinks for sudo-dummy"
 ln -s /usr/bin/doas /usr/local/bin/sudo
 
+log_text "Install build-essential, now without sudo dependency"
+pacman_whenneeded build-essential
+
 log_text "Create and build vim-dummy"
 cp -r ${SCRIPTDIR}/placeholders/vim "${TEMPHOME}"/
 pushd "${TEMPHOME}"
