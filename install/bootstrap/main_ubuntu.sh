@@ -6,8 +6,8 @@ wget "https://packages.microsoft.com/config/ubuntu/$REPO_VERSION/packages-micros
 dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
-log_text "Add ppa source for neovim"
-add-apt-repository ppa:neovim-ppa/stable -y
+log_text "Add unstable ppa source for neovim"
+add-apt-repository ppa:neovim-ppa/unstable -y
 
 log_text "Update package cache"
 apt update
