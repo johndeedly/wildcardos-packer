@@ -6,9 +6,8 @@ cp "${SCRIPTDIR}/package_manager/ignored-packages" ${MOUNTPOINT%%/}/etc/apt/pref
 
 log_text "Enable repositories"
 tee /etc/apt/sources.list <<EOF
-deb  https://ftp.halifax.rwth-aachen.de/ubuntu  ${UBUNTU_RELEASE}           main universe
-deb  https://ftp.halifax.rwth-aachen.de/ubuntu  ${UBUNTU_RELEASE}-security  main universe
-deb  https://ftp.halifax.rwth-aachen.de/ubuntu  ${UBUNTU_RELEASE}-updates   main universe
+deb  https://ftp.halifax.rwth-aachen.de/ubuntu  ${UBUNTU_RELEASE}           main universe multiverse
+deb  https://ftp.halifax.rwth-aachen.de/ubuntu  ${UBUNTU_RELEASE}-security  main universe multiverse
 EOF
 
 log_text "Update"
