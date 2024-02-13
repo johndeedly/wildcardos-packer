@@ -1,2 +1,2 @@
 @echo off
-powershell -NoProfile -ExecutionPolicy Bypass -File pipeline.ps1 %*
+powershell -nop -c "[Environment]::CurrentDirectory = $PWD.Path; Invoke-Expression(""& { $([System.IO.File]::ReadAllText('pipeline.ps1')) } %*"")"
