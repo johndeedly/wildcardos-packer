@@ -47,7 +47,7 @@ if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
     PACKAGE_LIST+=( bluez bluez-tools )
 fi
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
-    PACKAGE_LIST+=( virtualbox-guest-utils qemu-guest-agent )
+    PACKAGE_LIST+=( virtualbox-guest-additions-iso qemu-guest-agent )
 fi
 
 log_text "Configure kernel image creation without symlinks in boot"

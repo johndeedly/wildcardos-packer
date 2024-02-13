@@ -25,5 +25,9 @@ fi
 
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
     log_text "Configure virtual machine drivers"
-    systemctl enable vboxservice
+    mount /usr/share/virtualbox/VBoxGuestAdditions.iso /mnt
+    pushd /mnt
+        ./VBoxLinuxAdditions.run
+    popd
+    umount /mnt
 fi
