@@ -138,11 +138,11 @@ source "qemu" "default" {
   headless           = var.headless
   iso_checksum       = "none"
   iso_url            = "archlinux-${var.yearmonthday}-x86_64.iso"
-  output_directory   = "output/${var.stage}"
+  output_directory   = "output/${var.build_arch}-${var.stage}"
   ssh_username       = "root"
   ssh_password       = "packer-build-passwd"
   ssh_timeout        = "10m"
-  vm_name            = "wildcardos-${var.stage}-${var.yearmonthday}-x86_64.qcow2"
+  vm_name            = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2"
 }
 
 
@@ -162,14 +162,14 @@ source "virtualbox-iso" "default" {
   iso_checksum             = "none"
   iso_interface            = "sata"
   iso_url                  = "archlinux-${var.yearmonthday}-x86_64.iso"
-  output_directory         = "output/${var.stage}"
+  output_directory         = "output/${var.build_arch}-${var.stage}"
   output_filename          = "../wildcardos-${var.stage}-${var.yearmonthday}-x86_64"
   ssh_username             = "root"
   ssh_password             = "packer-build-passwd"
   ssh_timeout              = "10m"
   vboxmanage               = [["modifyvm", "{{ .Name }}", "--chipset", "ich9", "--firmware", "efi", "--cpus", "${var.cpu_cores}", "--audio-driver", "${var.sound_driver}", "--audio-out", "on", "--audio-enabled", "on", "--usb", "on", "--usb-xhci", "on", "--clipboard", "hosttoguest", "--draganddrop", "hosttoguest", "--graphicscontroller", "vmsvga", "--acpi", "on", "--ioapic", "on", "--apic", "on", "--accelerate3d", "${var.accel_graphics}", "--accelerate2dvideo", "on", "--vram", "128", "--pae", "on", "--nested-hw-virt", "on", "--paravirtprovider", "kvm", "--hpet", "on", "--hwvirtex", "on", "--largepages", "on", "--vtxvpid", "on", "--vtxux", "on", "--biosbootmenu", "messageandmenu", "--rtcuseutc", "on", "--nictype1", "virtio", "--macaddress1", "auto"]]
   vboxmanage_post          = [["modifyvm", "{{ .Name }}", "--macaddress1", "auto"]]
-  vm_name                  = "wildcardos-${var.stage}-${var.yearmonthday}-x86_64"
+  vm_name                  = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64"
 }
 
 
@@ -242,17 +242,17 @@ build {
 
   provisioner "shell-local" {
     inline = [<<EOS
-tee output/${var.stage}/wildcardos-${var.stage}-${var.yearmonthday}-x86_64.run.sh <<EOF
+tee output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.run.sh <<EOF
 #!/usr/bin/env bash
 trap "trap - SIGTERM && kill -- -\$\$" SIGINT SIGTERM EXIT
 mkdir -p "/tmp/swtpm.0" "share"
 /usr/bin/swtpm socket --tpm2 --tpmstate dir="/tmp/swtpm.0" --ctrl type=unixio,path="/tmp/swtpm.0/vtpm.sock" &
 /usr/bin/qemu-system-x86_64 \\
-  -name wildcardos-${var.stage}-${var.yearmonthday}-x86_64 \\
+  -name wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64 \\
   -machine type=q35,accel=kvm \\
   -vga virtio \\
   -cpu host \\
-  -drive file=wildcardos-${var.stage}-${var.yearmonthday}-x86_64.qcow2,if=virtio,cache=writeback,discard=unmap,detect-zeroes=unmap,format=qcow2 \\
+  -drive file=wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2,if=virtio,cache=writeback,discard=unmap,detect-zeroes=unmap,format=qcow2 \\
   -device tpm-tis,tpmdev=tpm0 -tpmdev emulator,id=tpm0,chardev=vtpm -chardev socket,id=vtpm,path=/tmp/swtpm.0/vtpm.sock \\
   -drive file=/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd,if=pflash,unit=0,format=raw,readonly=on \\
   -drive file=efivars.fd,if=pflash,unit=1,format=raw \\
@@ -264,7 +264,7 @@ mkdir -p "/tmp/swtpm.0" "share"
   -rtc base=utc,clock=host
 EOF
 # -display none, -daemonize, hostfwd=::12345-:22 for running as a daemonized server
-chmod +x output/${var.stage}/wildcardos-${var.stage}-${var.yearmonthday}-x86_64.run.sh
+chmod +x output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.run.sh
 EOS
     ]
     only_on = ["linux"]
