@@ -5,6 +5,7 @@ pacman_whenneeded dpkg
 
 log_text "Create and build sudo-dummy"
 cp -r ${SCRIPTDIR}/placeholders/sudo "${TEMPHOME}"/
+chmod a+x "${TEMPHOME}"/sudo/DEBIAN/*
 pushd "${TEMPHOME}"
     dpkg -b ./sudo sudo-dummy.deb
     DEBIAN_FRONTEND="noninteractive" eatmydata apt -y -q install "${TEMPHOME}"/sudo-dummy.deb
@@ -20,6 +21,7 @@ pacman_whenneeded build-essential
 
 log_text "Create and build vim-dummy"
 cp -r ${SCRIPTDIR}/placeholders/vim "${TEMPHOME}"/
+chmod a+x "${TEMPHOME}"/vim/DEBIAN/*
 pushd "${TEMPHOME}"
     dpkg -b ./vim vim-dummy.deb
     DEBIAN_FRONTEND="noninteractive" eatmydata apt -y -q install "${TEMPHOME}"/vim-dummy.deb
@@ -35,6 +37,7 @@ ln -s /usr/bin/nvim /usr/local/bin/gvim
 log_text "Canonical, I do not want ads in my shell"
 log_text "Create and build fake ubuntu-advantage-tools"
 cp -r ${SCRIPTDIR}/placeholders/ubuntu-advantage-tools "${TEMPHOME}"/
+chmod a+x "${TEMPHOME}"/ubuntu-advantage-tools/DEBIAN/*
 pushd "${TEMPHOME}"
     dpkg -b ./ubuntu-advantage-tools fake-ubuntu-advantage-tools.deb
     DEBIAN_FRONTEND="noninteractive" eatmydata apt -y -q install "${TEMPHOME}"/fake-ubuntu-advantage-tools.deb
