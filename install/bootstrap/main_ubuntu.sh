@@ -54,9 +54,9 @@ EOF
 
 log_text "Install xkcd for user, root and skeleton"
 su -s /bin/bash - "${USERID}" <<EOS
-PYTHONUSERBASE=$USERHOME python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
+PYTHONUSERBASE=$USERHOME/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 EOS
-PYTHONUSERBASE=$ROOTHOME python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
+PYTHONUSERBASE=$ROOTHOME/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 PYTHONUSERBASE=/etc/skel/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 
 log_text "Install PowerShell"
