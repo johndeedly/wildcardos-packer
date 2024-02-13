@@ -31,6 +31,9 @@ if ! [[ ${TAGS[@]} =~ "dualboot" ]]; then
     set 1 esp on \
     mkpart root btrfs ${part2}MiB ${part3}MiB \
     mkpart data ${part3}MiB -4MiB
+  log_text "Wait 5 seconds to let the os detect the newly created partitions"
+  sync
+  sleep 5
   # efi part
   PART_EFI=$(ls ${DEVICE}* | grep -E "^${DEVICE}p?1$")
   # msr part
@@ -60,6 +63,9 @@ else
     mkpart windata ${part6}MiB ${part7}MiB \
     set 6 msftdata on \
     mkpart data ${part7}MiB -4MiB
+  log_text "Wait 5 seconds to let the os detect the newly created partitions"
+  sync
+  sleep 5
   # efi part
   PART_EFI=$(ls ${DEVICE}* | grep -E "^${DEVICE}p?1$")
   # msr part

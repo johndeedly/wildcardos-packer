@@ -5,10 +5,6 @@ log_text "partitioning"
 log_text "Partition the main drive"
 source "${SCRIPTDIR}/partitioning/parted.sh"
 
-log_text "Wait 5 seconds to let the os detect the newly created partitions"
-sync
-sleep 5
-
 log_text "Calculate swap size"
 source "${SCRIPTDIR}/partitioning/swapsize.sh"
 
