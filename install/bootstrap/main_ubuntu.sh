@@ -45,6 +45,9 @@ CARGO_TARGET_DIR=/var/tmp CARGO_INSTALL_ROOT=/usr/local cargo install starship -
 log_text "Enable system packages"
 systemctl enable systemd-networkd systemd-resolved systemd-homed ssh ufw ly
 
+log_text "Disable nfs server"
+systemctl disable nfs-server nfs-blkmap
+
 log_text "Disable tty login"
 systemctl mask console-getty.service
 for i in {1..9}; do
