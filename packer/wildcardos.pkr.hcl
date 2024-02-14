@@ -28,7 +28,7 @@ variable "build_arch" {
   type    = string
   default = "archlinux"
   validation {
-    condition     = contains(["archlinux","ubuntu","rockylinux"], var.build_arch)
+    condition     = contains(["archlinux", "ubuntu", "rockylinux"], var.build_arch)
     error_message = "The value of var.build_arch must be archlinux, ubuntu or rockylinux."
   }
 }
@@ -84,7 +84,7 @@ variable "ubuntu_release" {
 }
 
 variable "configuration" {
-  type    = list(string)
+  type = list(string)
   default = [
     #"target_host",
     "target_guest",
@@ -163,12 +163,12 @@ source "virtualbox-iso" "default" {
   iso_interface            = "sata"
   iso_url                  = "archlinux-${var.yearmonthday}-x86_64.iso"
   output_directory         = "output/${var.build_arch}-${var.stage}"
-  output_filename          = "../wildcardos-${var.stage}-${var.yearmonthday}-x86_64"
+  output_filename          = "../wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64"
   ssh_username             = "root"
   ssh_password             = "packer-build-passwd"
   ssh_timeout              = "10m"
-  vboxmanage               = [["modifyvm", "{{ .Name }}", "--chipset", "ich9", "--firmware", "efi", "--cpus", "${var.cpu_cores}", "--audio-driver", "${var.sound_driver}", "--audio-out", "on", "--audio-enabled", "on", "--usb", "on", "--usb-xhci", "on", "--clipboard", "hosttoguest", "--draganddrop", "hosttoguest", "--graphicscontroller", "vmsvga", "--acpi", "on", "--ioapic", "on", "--apic", "on", "--accelerate3d", "${var.accel_graphics}", "--accelerate2dvideo", "on", "--vram", "128", "--pae", "on", "--nested-hw-virt", "on", "--paravirtprovider", "kvm", "--hpet", "on", "--hwvirtex", "on", "--largepages", "on", "--vtxvpid", "on", "--vtxux", "on", "--biosbootmenu", "messageandmenu", "--rtcuseutc", "on", "--nictype1", "virtio", "--macaddress1", "auto"]]
-  vboxmanage_post          = [["modifyvm", "{{ .Name }}", "--macaddress1", "auto"]]
+  vboxmanage               = [["modifyvm", "{{ .Name }}", "--chipset", "ich9", "--firmware", "efi", "--cpus", "${var.cpu_cores}", "--audio-driver", "${var.sound_driver}", "--audio-out", "on", "--audio-enabled", "on", "--usb", "on", "--usb-xhci", "on", "--clipboard", "hosttoguest", "--draganddrop", "hosttoguest", "--graphicscontroller", "vmsvga", "--acpi", "on", "--ioapic", "on", "--apic", "on", "--accelerate3d", "${var.accel_graphics}", "--accelerate2dvideo", "on", "--vram", "128", "--pae", "on", "--nested-hw-virt", "on", "--paravirtprovider", "kvm", "--hpet", "on", "--hwvirtex", "on", "--largepages", "on", "--vtxvpid", "on", "--vtxux", "on", "--biosbootmenu", "messageandmenu", "--rtcuseutc", "on", "--nictype1", "virtio", "--macaddress1", "auto"], ["sharedFolder", "add", "{{ .Name }}", "--name", "host.0", "--hostpath", "output/"]]
+  vboxmanage_post          = [["modifyvm", "{{ .Name }}", "--macaddress1", "auto"], ["sharedFolder", "remove", "{{ .Name }}", "--name", "host.0"]]
   vm_name                  = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64"
 }
 
@@ -179,9 +179,9 @@ build {
   # mount the external output folder as share
   provisioner "shell" {
     inline = [
-      "mount --mkdir -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || true"
+      "mount --mkdir -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || mount --mkdir -t vboxsf -o rw host.0 /share"
     ]
-    only   = ["qemu.default"]
+    only = ["qemu.default", "virtualbox-iso.default"]
   }
 
   # remount copy on write space
@@ -224,10 +224,10 @@ build {
       "mkdir -m755 /install",
     ]
   }
-  
+
   # trailing slash: content of installation dir is copied to the /install folder
   provisioner "file" {
-    source = "install/"
+    source      = "install/"
     destination = "/install"
   }
 

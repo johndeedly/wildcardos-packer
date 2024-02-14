@@ -11,7 +11,7 @@ elif ! mountpoint -q -- /share; then
     if mountpoint -q -- ${MOUNTPOINT%%/}/share; then
         umount ${MOUNTPOINT%%/}/share
         mkdir -m777 -p /share
-        mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share
+        mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || mount -t vboxsf -o rw host.0 /share
     else
         log_error "/share doesn't appear to be mounted, aborting to prevent accidentally filling up the main filesystem"
         exit 3
