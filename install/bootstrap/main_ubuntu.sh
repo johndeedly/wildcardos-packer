@@ -42,6 +42,16 @@ CARGO_TARGET_DIR=/var/tmp CARGO_INSTALL_ROOT=/usr/local cargo install viu --lock
 log_text "Install and configure starship"
 CARGO_TARGET_DIR=/var/tmp CARGO_INSTALL_ROOT=/usr/local cargo install starship --locked
 
+log_text "Install nerd font symbols only for starship"
+mkdir -p /etc/fonts/conf.d /usr/share/fontconfig/conf.avail /usr/share/fonts/TTF
+curl -sL 'https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/10-nerd-font-symbols.conf' \
+    > /usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf
+ln -s /usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf /etc/fonts/conf.d/10-nerd-font-symbols.conf
+curl -sL 'https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf' \
+    > /usr/share/fonts/TTF/SymbolsNerdFont-Regular.ttf
+curl -sL 'https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf' \
+    > /usr/share/fonts/TTF/SymbolsNerdFontMono-Regular.ttf
+
 log_text "Enable system packages"
 systemctl enable systemd-networkd systemd-resolved systemd-homed ssh ufw ly
 
