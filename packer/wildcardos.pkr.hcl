@@ -167,56 +167,14 @@ source "virtualbox-iso" "default" {
   ssh_username             = "root"
   ssh_password             = "packer-build-passwd"
   ssh_timeout              = "10m"
-  vboxmanage               = [["modifyvm", "{{ .Name }}", "--chipset", "ich9", "--firmware", "efi", "--cpus", "${var.cpu_cores}", "--audio-driver", "${var.sound_driver}", "--audio-out", "on", "--audio-enabled", "on", "--usb", "on", "--usb-xhci", "on", "--clipboard", "hosttoguest", "--draganddrop", "hosttoguest", "--graphicscontroller", "vmsvga", "--acpi", "on", "--ioapic", "on", "--apic", "on", "--accelerate3d", "${var.accel_graphics}", "--accelerate2dvideo", "on", "--vram", "128", "--pae", "on", "--nested-hw-virt", "on", "--paravirtprovider", "kvm", "--hpet", "on", "--hwvirtex", "on", "--largepages", "on", "--vtxvpid", "on", "--vtxux", "on", "--biosbootmenu", "messageandmenu", "--rtcuseutc", "on", "--nictype1", "virtio", "--macaddress1", "auto"], ["sharedFolder", "add", "{{ .Name }}", "--name", "host.0", "--hostpath", "output/"]]
-  vboxmanage_post          = [["modifyvm", "{{ .Name }}", "--macaddress1", "auto"], ["sharedFolder", "remove", "{{ .Name }}", "--name", "host.0"]]
+  vboxmanage               = [["modifyvm", "{{ .Name }}", "--chipset", "ich9", "--firmware", "efi", "--cpus", "${var.cpu_cores}", "--audio-driver", "${var.sound_driver}", "--audio-out", "on", "--audio-enabled", "on", "--usb", "on", "--usb-xhci", "on", "--clipboard", "hosttoguest", "--draganddrop", "hosttoguest", "--graphicscontroller", "vmsvga", "--acpi", "on", "--ioapic", "on", "--apic", "on", "--accelerate3d", "${var.accel_graphics}", "--accelerate2dvideo", "on", "--vram", "128", "--pae", "on", "--nested-hw-virt", "on", "--paravirtprovider", "kvm", "--hpet", "on", "--hwvirtex", "on", "--largepages", "on", "--vtxvpid", "on", "--vtxux", "on", "--biosbootmenu", "messageandmenu", "--rtcuseutc", "on", "--nictype1", "virtio", "--macaddress1", "auto"], ["sharedfolder", "add", "{{ .Name }}", "--name", "host.0", "--hostpath", "output/"]]
+  vboxmanage_post          = [["modifyvm", "{{ .Name }}", "--macaddress1", "auto"], ["sharedfolder", "remove", "{{ .Name }}", "--name", "host.0"]]
   vm_name                  = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64"
 }
 
 
 build {
   sources = ["source.null.default", "source.qemu.default", "source.virtualbox-iso.default"]
-
-  # mount the external output folder as share
-  provisioner "shell" {
-    inline = [
-      "mount --mkdir -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || mount --mkdir -t vboxsf -o rw host.0 /share"
-    ]
-    only = ["qemu.default", "virtualbox-iso.default"]
-  }
-
-  # remount copy on write space
-  provisioner "shell" {
-    inline = [
-      "mount -o remount,size=75% /run/archiso/cowspace || true"
-    ]
-  }
-
-  # make the journal log persistent on ramfs
-  provisioner "shell" {
-    inline = [
-      "mkdir -p /var/log/journal",
-      "systemd-tmpfiles --create --prefix /var/log/journal",
-      "systemctl restart systemd-journald"
-    ]
-  }
-
-  # wait for pacman keyring init to be done
-  provisioner "shell" {
-    inline = [
-      "while ! systemctl show pacman-init.service | grep SubState=exited; do",
-      "  systemctl --no-pager status -n0 pacman-init.service || true",
-      "  sleep 5",
-      "done",
-    ]
-  }
-
-  # prepare nspawn environment to allow ufw firewall configuration
-  provisioner "shell" {
-    inline = [
-      "modprobe iptable_filter",
-      "modprobe ip6table_filter"
-    ]
-  }
 
   # create the script build folder
   provisioner "shell" {

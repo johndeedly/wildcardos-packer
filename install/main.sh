@@ -80,6 +80,9 @@ if [[ ${TAGS[@]} =~ "target_nspawn" ]]; then
     fi
 fi
 
+log_text "Prepare archiso environment"
+source "${SCRIPTDIR}/prepare_archiso/main.sh"
+
 if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" || ${TAGS[@]} =~ "target_nspawn" ]]; then
     source "${SCRIPTDIR}/installed_hardware/main.sh"
 fi
@@ -126,7 +129,7 @@ mountpoint -q -- ${MOUNTPOINT%%/}
 
 log_text "Switching to systemd-nspawn context"
 [ -e "${SCRIPTDIR}/nspawn-env" ] && rm -f "${SCRIPTDIR}/nspawn-env"
-(set -o posix; set | grep -E '^DEVICE|^MOUNTPOINT|^SCRIPTDIR|^VERBOSE|^TAGS|^INSTALLED_HARDWARE_|^PART_|^UBUNTU_RELEASE' | while read -r line; do
+(set -o posix; set | grep -E '^DEVICE|^MOUNTPOINT|^SCRIPTDIR|^VERBOSE|^TAGS|^INSTALLED_HARDWARE_|^PART_|^UBUNTU_RELEASE|^RUNTIME_ENVIRONMENT_' | while read -r line; do
   tee -a ${SCRIPTDIR}/nspawn-env <<EOF
 $line
 EOF
