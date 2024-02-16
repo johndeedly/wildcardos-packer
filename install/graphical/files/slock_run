@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+should_lock() {
+    if [[ $(pactl list sink-inputs | tr -d '\n' | sed -e 's/\s\+//g' | grep -c '[cC]orked:no[mM]ute:no[vV]olume:.*[1-9][0-9]*%/') -gt 0 ]]; then
+        return 1
+    fi
+    return 0
+}
+
+if should_lock; then
+    xautolock -locknow
+else
+    xautolock -restart
+fi

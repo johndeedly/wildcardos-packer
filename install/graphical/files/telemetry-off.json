@@ -1,0 +1,8 @@
+{
+    "MetricsReportingEnabled": false,
+    "SafeBrowsingProtectionLevel": 0,
+    "AbusiveExperienceInterventionEnforce": false,
+    "GoogleSearchSidePanelEnabled": false,
+    "AdvancedProtectionAllowed": false,
+    "BrowserSignin": 0
+}

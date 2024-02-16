@@ -41,6 +41,10 @@ if [[ ${TAGS[@]} =~ "bootstrap" ]]; then
   source "${SCRIPTDIR}/bootstrap/main.sh"
 fi
 
+if [[ ${TAGS[@]} =~ "graphical" ]]; then
+  source "${SCRIPTDIR}/graphical/main.sh"
+fi
+
 if [[ ${TAGS[@]} =~ "pxeboot" ]]; then
   source "${SCRIPTDIR}/pxeboot/main.sh"
 fi

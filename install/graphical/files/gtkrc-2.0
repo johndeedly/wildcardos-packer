@@ -1,0 +1,10 @@
+gtk-can-change-accels = 1
+gtk-icon-theme-name = "Papirus"
+gtk-fallback-icon-theme = "Adwaita"
+gtk-theme-name = "Adwaita"
+style "user-font"
+{
+    font_name="sans 11"
+}
+widget_class "*" style "user-font"
+gtk-font-name = "sans 11"

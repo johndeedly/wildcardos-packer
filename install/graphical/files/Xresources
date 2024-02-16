@@ -1,0 +1,14 @@
+!
+! Font settings
+!
+
+Xft.dpi: 96
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+! NO FORCING ANTIALIAS WHILE USING NOTO COLOR EMOJI!!!
+! (Firefox!)
+! Xft.antialias: 1
+Xft.rgba: rgb
+Xft.embeddedbitmap: 0

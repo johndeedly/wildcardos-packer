@@ -1,0 +1,7 @@
+{
+    "BlockThirdPartyCookies": true,
+    "AdsSettingForIntrusiveAdsSites": 2,
+    "DNSInterceptionChecksEnabled": false,
+    "ExtensionManifestV2Availability": 2,
+    "DnsOverHttpsMode": "off"
+}
