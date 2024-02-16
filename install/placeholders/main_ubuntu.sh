@@ -44,3 +44,12 @@ pushd "${TEMPHOME}"
     sync
 popd
 rm -rf "${TEMPHOME}"/ubuntu-advantage-tools/ "${TEMPHOME}"/fake-ubuntu-advantage-tools.deb
+
+log_text "Disable rsyslog"
+systemctl disable rsyslog
+
+log_text "Force replace rsyslog with syslog-ng"
+DEBIAN_FRONTEND="noninteractive" eatmydata apt -y -q install syslog-ng
+
+log_text "Disable syslog-ng"
+systemctl disable syslog-ng

@@ -17,6 +17,8 @@ PACKAGE_LIST=(
     mtools
     lvm2
     btrfs-progs
+    # remote syslogging
+    syslog-ng
 )
 if [ -n "$INSTALLED_HARDWARE_CPU_AMD" ]; then
     PACKAGE_LIST+=( amd-ucode )
