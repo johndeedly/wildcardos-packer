@@ -9,6 +9,13 @@ chpasswd:
       password: packer-build-passwd
       type: text
 
+### update hostname
+hostname: wildcard-os
+create_hostname_file: true
+# https://www.icann.org/en/public-comment/proceeding/proposed-top-level-domain-string-for-private-use-24-01-2024
+fqdn: wildcard-os.internal
+prefer_fqdn_over_hostname: true
+
 ### first command to execute in cloud-init execution order
 bootcmd:
   # stop and disable reflector to be able to change the pacman mirrorlist

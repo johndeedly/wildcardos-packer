@@ -127,6 +127,35 @@ fi
 log_text "Final check - after this point ${MOUNTPOINT%%/} should be a mountpoint"
 mountpoint -q -- ${MOUNTPOINT%%/}
 
+if [ -f /etc/hostname ]; then
+    log_text "Use /etc/hostname from host"
+    mkdir -p ${MOUNTPOINT%%/}/etc
+    sed -i '/./,$!d' /etc/hostname
+    cat /etc/hostname | tee ${MOUNTPOINT%%/}/etc/hostname
+fi
+
+if [ -f /etc/hosts ] && grep '127.0.0.1' /etc/hosts >/dev/null ; then
+    log_text "Use /etc/hosts from host"
+    mkdir -p ${MOUNTPOINT%%/}/etc
+    sed -i '/./,$!d' /etc/hosts
+    cat /etc/hosts | tee ${MOUNTPOINT%%/}/etc/hosts
+elif [ -f /etc/hostname ]; then
+    log_text "Create new /etc/hosts from host information"
+    mkdir -p ${MOUNTPOINT%%/}/etc
+    sed -i '/./,$!d' /etc/hostname
+    FQDN=$(head -n 1 /etc/hostname)
+    HOSTNAME=$(cat /etc/hostname | grep -Eo '^[^.]*')
+    tee ${MOUNTPOINT%%/}/etc/hosts <<EOF
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+
+# https://www.icann.org/en/public-comment/proceeding/proposed-top-level-domain-string-for-private-use-24-01-2024
+# IPv4/v6   FQDN  HOSTNAME  localhost.internal localhost
+127.0.0.1   $FQDN $HOSTNAME localhost.internal localhost
+::1         $FQDN $HOSTNAME localhost.internal localhost
+EOF
+fi
+
 log_text "Switching to systemd-nspawn context"
 [ -e "${SCRIPTDIR}/nspawn-env" ] && rm -f "${SCRIPTDIR}/nspawn-env"
 (set -o posix; set | grep -E '^DEVICE|^MOUNTPOINT|^SCRIPTDIR|^VERBOSE|^TAGS|^INSTALLED_HARDWARE_|^PART_|^UBUNTU_RELEASE|^RUNTIME_ENVIRONMENT_' | while read -r line; do
