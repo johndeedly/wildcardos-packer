@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Gammastep
+Comment=Autostart gammastep on startup
+Exec=/usr/bin/gammastep -l manual:51:10 -t 6500:3500 -b 1:0.75 -m randr
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true

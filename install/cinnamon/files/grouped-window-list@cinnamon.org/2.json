@@ -1,0 +1,28 @@
+{
+    "pinned-apps": {
+        "type": "generic",
+        "default": [
+            "nemo.desktop",
+            "firefox.desktop",
+            "org.gnome.Terminal.desktop"
+        ],
+        "value": [
+            "nemo.desktop",
+            "firefox.desktop",
+            "chromium.desktop",
+            "kitty.desktop"
+        ]
+    },
+    "show-apps-order-hotkey": {
+        "type": "keybinding",
+        "default": "<Super>grave",
+        "description": "Global hotkey to show the order of apps",
+        "value": ""
+    },
+    "super-num-hotkeys": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Enable Super+<number> shortcut to switch/open apps",
+        "value": false
+    }
+}

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Flameshot
+Comment=Autostart flameshot on startup
+Exec=/usr/bin/flameshot
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true

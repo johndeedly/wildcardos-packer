@@ -1,0 +1,13 @@
+{
+    "section2": {
+        "type": "section",
+        "description": "Keyboard shortcuts"
+    },
+    "keyOpen": {
+        "type": "keybinding",
+        "description": "Show calendar",
+        "default": "<Super>c",
+        "tooltip": "Set keybinding(s) to show the calendar.",
+        "value": ""
+    }
+}

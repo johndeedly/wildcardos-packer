@@ -1,0 +1,20 @@
+{
+    "section3": {
+        "type": "section",
+        "description": "Keyboard shortcuts"
+    },
+    "keyOpen": {
+        "type": "keybinding",
+        "description": "Show notifications",
+        "default": "<Super>n",
+        "tooltip": "Set keybinding(s) to show the notification popup menu.",
+        "value": ""
+    },
+    "keyClear": {
+        "type": "keybinding",
+        "description": "Clear notifications",
+        "default": "<Shift><Super>c",
+        "tooltip": "Set keybinding(s) to clear all notifications.",
+        "value": ""
+    }
+}

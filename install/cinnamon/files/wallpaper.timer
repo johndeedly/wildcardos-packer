@@ -1,0 +1,9 @@
+[Unit]
+Description=Execute wallpaper switcher service every hour
+
+[Timer]
+OnCalendar=hourly
+Unit=wallpaper.service
+
+[Install]
+WantedBy=timers.target

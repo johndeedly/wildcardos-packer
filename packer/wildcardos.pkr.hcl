@@ -92,7 +92,7 @@ variable "configuration" {
     #"target_nspawn",
     "bootstrap",
     "graphical",
-    "qtile",
+    "cinnamon",
   ]
   validation {
     condition     = max([for o in var.configuration : length(split("'", o))]...) == 1

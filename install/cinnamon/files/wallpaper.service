@@ -1,0 +1,12 @@
+[Unit]
+Description=Switch to random desktop wallpaper
+
+[Service]
+Type=simple
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+ExecStart=/usr/local/bin/wallpaper.sh
+
+[Install]
+WantedBy=default.target
