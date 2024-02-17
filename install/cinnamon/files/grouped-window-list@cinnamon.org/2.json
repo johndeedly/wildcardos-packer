@@ -8,8 +8,8 @@
         ],
         "value": [
             "nemo.desktop",
-            "firefox.desktop",
-            "chromium.desktop",
+            "org.mozilla.firefox.desktop:flatpak",
+            "org.chromium.Chromium.desktop:flatpak",
             "kitty.desktop"
         ]
     },

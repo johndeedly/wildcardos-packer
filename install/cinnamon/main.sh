@@ -24,7 +24,7 @@ XDG_CONFIG_HOME="${USERHOME}"/.config dconf dump /org/cinnamon/ > "${USERHOME}"/
 tee -a "${USERHOME}"/dconf-dump.ini <<EOX
 
 [/]
-favorite-apps=['firefox.desktop', 'chromium.desktop', 'kitty.desktop', 'cinnamon-settings.desktop', 'nemo.desktop']
+favorite-apps=['org.mozilla.firefox.desktop:flatpak', 'org.chromium.Chromium.desktop:flatpak', 'kitty.desktop', 'cinnamon-settings.desktop', 'nemo.desktop']
 
 [desktop/background]
 picture-uri='file:///usr/share/backgrounds/elementaryos-default'
