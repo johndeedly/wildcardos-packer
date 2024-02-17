@@ -66,6 +66,13 @@ PACKAGE_LIST=(
 log_text "Install and configure base packages needed for graphical environments"
 pacman_whenneeded ${PACKAGE_LIST[@]}
 
+log_text "Disable and mask light display manager, thanks ubuntu"
+systemctl disable lightdm
+systemctl mask lightdm
+
+log_text "Reenable ly display manager, thanks ubuntu"
+systemctl enable ly
+
 log_text "Add flathub repo to system when not present"
 flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -86,7 +93,6 @@ flatpak install --system --assumeyes --noninteractive --or-update flathub com.jg
 
 log_text "Download elementary os wallpapers"
 git clone --depth 1 https://github.com/elementary/wallpapers.git /var/tmp/elementary
-git reset --git-dir=/var/tmp/elementary/.git --work-tree=/var/tmp/elementary --hard ca00c646ee783cf7fb0796e75abd73950451bb73
 mkdir -p /usr/share/backgrounds
 cp /var/tmp/elementary/backgrounds/* /usr/share/backgrounds/
 ln -s 'Photo of Valley.jpg' /usr/share/backgrounds/elementaryos-default
