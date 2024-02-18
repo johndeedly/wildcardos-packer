@@ -22,8 +22,7 @@ pacman_whenneeded nano neovim htop btop dialog git \
     openssh-server openssh-client ufw wireguard-tools wget \
     gvfs gvfs-backends sshfs cifs-utils nfs-kernel-server \
     unzip p7zip rsync \
-    xdg-user-dirs xdg-utils \
-    powershell
+    xdg-user-dirs xdg-utils
 
 log_text "Install and configure ly"
 pacman_whenneeded cmake libpam0g-dev libx11-xcb-dev
@@ -76,3 +75,8 @@ PYTHONUSERBASE=$USERHOME/.local python3 -m pip install --user --break-system-pac
 EOS
 PYTHONUSERBASE=$ROOTHOME/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 PYTHONUSERBASE=/etc/skel/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
+
+log_text "Install PowerShell"
+wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb -O powershell.deb
+apt -y install powershell.deb
+rm powershell.deb
