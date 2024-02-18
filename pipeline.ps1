@@ -62,13 +62,14 @@ if ($Encryption) {
 	Write-Host ":: Encryption enabled"
 	$env:PKR_VAR_encryption = "true"
 }
+if ($Cinnamon) {
+	$Bootstrap=$True
+	Write-Host ":: Cinnamon stage enabled"
+	$env:PKR_VAR_cinnamon = "true"
+}
 if ($Bootstrap) {
 	Write-Host ":: Bootstrap stage enabled"
 	$env:PKR_VAR_bootstrap = "true"
-}
-if ($Cinnamon) {
-	Write-Host ":: Cinnamon stage enabled"
-	$env:PKR_VAR_cinnamon = "true"
 }
 if ($PxeBoot) {
 	if ($Archlinux) {

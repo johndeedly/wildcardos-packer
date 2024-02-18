@@ -45,8 +45,8 @@ su -s /bin/bash -l $USERID <<EOS
     xdg-mime default libreoffice-impress.desktop `grep 'MimeType=' /usr/share/applications/libreoffice-impress.desktop | sed -e 's/.*=//' -e 's/;/ /g'`
 
 # browser (libreoffice first, then firefox)
-[ -f /var/lib/flatpak/exports/share/applications/firefox.desktop ] && \
-    xdg-mime default firefox.desktop `grep 'MimeType=' /var/lib/flatpak/exports/share/applications/firefox.desktop | sed -e 's/.*=//' -e 's/;/ /g'`
+[ -f /var/lib/flatpak/exports/share/applications/org.mozilla.firefox.desktop ] && \
+    xdg-mime default org.mozilla.firefox.desktop `grep 'MimeType=' /var/lib/flatpak/exports/share/applications/org.mozilla.firefox.desktop | sed -e 's/.*=//' -e 's/;/ /g'`
 
 # email program
 [ -f /usr/share/applications/org.gnome.Evolution.desktop ] && \
@@ -71,9 +71,8 @@ EOS
 
 log_text "Set xdg-settings defaults"
 su -s /bin/bash -l $USERID <<EOS
-xdg-settings set default-web-browser firefox.desktop
+xdg-settings set default-web-browser org.mozilla.firefox.desktop
 xdg-settings set default-url-scheme-handler mailto org.gnome.Evolution.desktop
-xdg-mime default firefox.desktop x-scheme-handler/https x-scheme-handler/http
 EOS
 
 log_text "Enable xrdp service"
