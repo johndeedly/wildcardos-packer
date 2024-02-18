@@ -63,6 +63,16 @@ variable "headless" {
   default = true
 }
 
+variable "bootstrap" {
+  type    = bool
+  default = false
+}
+
+variable "cinnamon" {
+  type    = bool
+  default = false
+}
+
 variable "pxeboot" {
   type    = bool
   default = false
@@ -95,9 +105,6 @@ variable "configuration" {
     "target_guest",
     #"target_container",
     #"target_nspawn",
-    "bootstrap",
-    #"graphical",
-    #"cinnamon",
   ]
   validation {
     condition     = max([for o in var.configuration : length(split("'", o))]...) == 1
@@ -198,7 +205,7 @@ build {
     inline = [
       "pushd /install",
       "  chmod a+x main.sh",
-      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeserve ? "pxeserve" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
+      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.bootstrap ? "bootstrap" : ""},${var.cinnamon ? "graphical,cinnamon" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeserve ? "pxeserve" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
       "popd"
     ]
   }

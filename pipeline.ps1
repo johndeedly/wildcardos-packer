@@ -13,6 +13,10 @@ Param(
     [switch]$DualBoot,
     [Parameter(Mandatory=$False)]
     [switch]$Encryption,
+    [Parameter(ParameterSetName='StageTarget')]
+    [switch]$Bootstrap,
+    [Parameter(ParameterSetName='StageTarget')]
+    [switch]$Cinnamon,
     [Parameter(ParameterSetName='BuildTarget')]
     [switch]$Archlinux,
     [Parameter(ParameterSetName='BuildTarget')]
@@ -24,7 +28,7 @@ Param(
     [Parameter(ParameterSetName='Fail', DontShow)] 
     ${-} = $(
         if ($PScmdlet.ParameterSetName -eq 'Fail') { 
-            throw "Please specify at least one build target." 
+            throw "Please specify one build and stage target." 
         }
     )
 )
@@ -52,6 +56,14 @@ if ($DualBoot) {
 if ($Encryption) {
 	Write-Host ":: Encryption enabled"
 	$env:PKR_VAR_encryption = "true"
+}
+if ($Bootstrap) {
+	Write-Host ":: Bootstrap stage enabled"
+	$env:PKR_VAR_bootstrap = "true"
+}
+if ($Cinnamon) {
+	Write-Host ":: Cinnamon stage enabled"
+	$env:PKR_VAR_cinnamon = "true"
 }
 if ($PxeBoot) {
 	if ($Archlinux) {
