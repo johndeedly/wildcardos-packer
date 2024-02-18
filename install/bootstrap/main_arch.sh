@@ -8,7 +8,7 @@ pacman_whenneeded nano neovim htop btop dialog git ufw \
   wireguard-tools wget nfs-utils ncdu viu core/man man-pages-de trash-cli \
   gvfs gvfs-smb sshfs cifs-utils \
   unzip p7zip rsync mc lf fzf xdg-user-dirs xdg-utils \
-  starship ttf-nerd-fonts-symbols
+  starship ttf-nerd-fonts-symbols powershell-bin
 
 log_text "Enable system packages"
 systemctl enable systemd-networkd systemd-resolved systemd-homed sshd ufw ly
@@ -31,9 +31,3 @@ PYTHONUSERBASE=$USERHOME/.local python3 -m pip install --user --break-system-pac
 EOS
 PYTHONUSERBASE=$ROOTHOME/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 PYTHONUSERBASE=/etc/skel/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
-
-log_text "Install PowerShell"
-dotnet tool install --global PowerShell --version 7.4.0
-su -s /bin/bash - "${USERID}" <<EOS
-dotnet tool install --global PowerShell --version 7.4.0
-EOS
