@@ -4,7 +4,6 @@ log_text "Install standard packages"
 pacman_whenneeded nano neovim htop btop dialog git ufw \
   bash-completion pacman-contrib openssh pv lshw libxml2 jq ly polkit \
   dotnet-host dotnet-sdk dotnet-runtime aspnet-runtime \
-  dotnet-sdk-6.0 dotnet-runtime-6.0 aspnet-runtime-6.0 \
   python python-pip words python-setuptools python-wheel \
   wireguard-tools wget nfs-utils ncdu viu core/man man-pages-de trash-cli \
   gvfs gvfs-smb sshfs cifs-utils \
