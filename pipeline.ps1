@@ -14,14 +14,19 @@ Param(
     [Parameter(Mandatory=$False)]
     [switch]$Encryption,
     [Parameter(ParameterSetName='StageTarget')]
+	[Parameter(ParameterSetName='Mandatory')]
     [switch]$Bootstrap,
     [Parameter(ParameterSetName='StageTarget')]
+	[Parameter(ParameterSetName='Mandatory')]
     [switch]$Cinnamon,
     [Parameter(ParameterSetName='BuildTarget')]
+    [Parameter(ParameterSetName='Mandatory')]
     [switch]$Archlinux,
     [Parameter(ParameterSetName='BuildTarget')]
+    [Parameter(ParameterSetName='Mandatory')]
     [switch]$Ubuntu,
     [Parameter(ParameterSetName='BuildTarget')]
+    [Parameter(ParameterSetName='Mandatory')]
     [switch]$Rockylinux,
     [Parameter(Mandatory=$True)]
     [string]$StageName,
