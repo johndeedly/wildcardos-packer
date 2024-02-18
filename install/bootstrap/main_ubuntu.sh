@@ -18,12 +18,12 @@ pacman_whenneeded nano neovim htop btop dialog git \
     lshw libxml2 jq \
     polkitd man manpages-de trash-cli \
     dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0 \
-    dotnet-sdk-6.0 dotnet-runtime-6.0 aspnetcore-runtime-6.0 \
     python-is-python3 python3-pip wngerman python3-setuptools python3-wheel \
     openssh-server openssh-client ufw wireguard-tools wget \
     gvfs gvfs-backends sshfs cifs-utils nfs-kernel-server \
     unzip p7zip rsync \
-    xdg-user-dirs xdg-utils
+    xdg-user-dirs xdg-utils \
+    powershell
 
 log_text "Install and configure ly"
 pacman_whenneeded cmake libpam0g-dev libx11-xcb-dev
@@ -76,9 +76,3 @@ PYTHONUSERBASE=$USERHOME/.local python3 -m pip install --user --break-system-pac
 EOS
 PYTHONUSERBASE=$ROOTHOME/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 PYTHONUSERBASE=/etc/skel/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
-
-log_text "Install PowerShell"
-dotnet tool install --global PowerShell --version 7.4.0
-su -s /bin/bash - "${USERID}" <<EOS
-dotnet tool install --global PowerShell --version 7.4.0
-EOS
