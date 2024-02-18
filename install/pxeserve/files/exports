@@ -1,0 +1,5 @@
+/srv/nfs    127.0.0.0/8(all_squash,insecure,ro)
+/srv/nfs    192.168.123.0/24(all_squash,insecure,ro)
+/srv/nfs    192.168.144.0/24(all_squash,insecure,ro)
+/srv/nfs    ::1/128(all_squash,insecure,ro)
+/srv/nfs    2001:db8:7b::/48(all_squash,insecure,ro)

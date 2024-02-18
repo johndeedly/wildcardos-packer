@@ -1,0 +1,6 @@
+[Match]
+Name=eth1
+
+[Network]
+Address=192.168.123.128/24
+Address=2001:db8:7b:1::/48

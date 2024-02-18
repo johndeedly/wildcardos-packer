@@ -68,6 +68,11 @@ variable "pxeboot" {
   default = false
 }
 
+variable "pxeserve" {
+  type    = bool
+  default = false
+}
+
 variable "pxeimage" {
   type    = bool
   default = false
@@ -91,8 +96,8 @@ variable "configuration" {
     #"target_container",
     #"target_nspawn",
     "bootstrap",
-    "graphical",
-    "cinnamon",
+    #"graphical",
+    #"cinnamon",
   ]
   validation {
     condition     = max([for o in var.configuration : length(split("'", o))]...) == 1
@@ -193,13 +198,61 @@ build {
     inline = [
       "pushd /install",
       "  chmod a+x main.sh",
-      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
+      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeserve ? "pxeserve" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
       "popd"
     ]
   }
 
   provisioner "shell-local" {
-    inline = [<<EOS
+    inline = var.pxeserve ? [<<EOS
+tee output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.run.sh <<EOF
+#!/usr/bin/env bash
+trap "trap - SIGTERM && kill -- -\$\$" SIGINT SIGTERM EXIT
+mkdir -p "/tmp/swtpm.0" "share"
+/usr/bin/swtpm socket --tpm2 --tpmstate dir="/tmp/swtpm.0" --ctrl type=unixio,path="/tmp/swtpm.0/vtpm.sock" &
+/usr/bin/qemu-system-x86_64 \\
+  -name wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64 \\
+  -machine type=q35,accel=kvm \\
+  -vga virtio \\
+  -cpu host \\
+  -drive file=wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2,if=virtio,cache=writeback,discard=unmap,detect-zeroes=unmap,format=qcow2 \\
+  -device tpm-tis,tpmdev=tpm0 -tpmdev emulator,id=tpm0,chardev=vtpm -chardev socket,id=vtpm,path=/tmp/swtpm.0/vtpm.sock \\
+  -drive file=/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd,if=pflash,unit=0,format=raw,readonly=on \\
+  -drive file=efivars.fd,if=pflash,unit=1,format=raw \\
+  -smp ${var.cpu_cores},sockets=1,cores=${var.cpu_cores},maxcpus=${var.cpu_cores} -m ${var.memory}M \\
+  -netdev user,id=user.0 -device virtio-net,netdev=user.0 \\
+  -netdev socket,id=user.1,listen=:34689 -device virtio-net,netdev=user.1 \\
+  -audio driver=pa,model=hda,id=snd0 -device hda-output,audiodev=snd0 \\
+  -virtfs local,path=share,mount_tag=host.0,security_model=mapped,id=host.0 \\
+  -usbdevice mouse -usbdevice keyboard \\
+  -rtc base=utc,clock=host
+EOF
+chmod +x output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.run.sh
+cp output/${var.build_arch}-${var.stage}/efivars.fd output/${var.build_arch}-${var.stage}/efivars.pxeboot.fd
+tee output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64-pxeboot.run.sh <<EOF
+#!/usr/bin/env bash
+trap "trap - SIGTERM && kill -- -\$\$" SIGINT SIGTERM EXIT
+mkdir -p "/tmp/swtpm.1" "share"
+/usr/bin/swtpm socket --tpm2 --tpmstate dir="/tmp/swtpm.1" --ctrl type=unixio,path="/tmp/swtpm.1/vtpm.sock" &
+/usr/bin/qemu-system-x86_64 \\
+  -name wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64 \\
+  -machine type=q35,accel=kvm \\
+  -vga virtio \\
+  -cpu host \\
+  -device tpm-tis,tpmdev=tpm0 -tpmdev emulator,id=tpm0,chardev=vtpm -chardev socket,id=vtpm,path=/tmp/swtpm.1/vtpm.sock \\
+  -drive file=/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd,if=pflash,unit=0,format=raw,readonly=on \\
+  -drive file=efivars.pxeboot.fd,if=pflash,unit=1,format=raw \\
+  -smp ${var.cpu_cores},sockets=1,cores=${var.cpu_cores},maxcpus=${var.cpu_cores} -m ${var.memory}M \\
+  -netdev socket,id=user.0,connect=:34689 -device virtio-net,netdev=user.0 \\
+  -netdev user,id=user.1 -device virtio-net,netdev=user.1 \\
+  -audio driver=pa,model=hda,id=snd0 -device hda-output,audiodev=snd0 \\
+  -virtfs local,path=share,mount_tag=host.0,security_model=mapped,id=host.0 \\
+  -usbdevice mouse -usbdevice keyboard \\
+  -rtc base=utc,clock=host
+EOF
+chmod +x output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64-pxeboot.run.sh
+EOS
+    ] : [<<EOS
 tee output/${var.build_arch}-${var.stage}/wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.run.sh <<EOF
 #!/usr/bin/env bash
 trap "trap - SIGTERM && kill -- -\$\$" SIGINT SIGTERM EXIT

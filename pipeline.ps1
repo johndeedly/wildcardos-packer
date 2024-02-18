@@ -4,6 +4,8 @@ Param(
     [Parameter(Mandatory=$False)]
     [switch]$PxeBoot,
     [Parameter(Mandatory=$False)]
+    [switch]$PxeServe,
+    [Parameter(Mandatory=$False)]
     [switch]$PxeImage,
     [Parameter(Mandatory=$False)]
     [switch]$VerboseOutput,
@@ -57,6 +59,14 @@ if ($PxeBoot) {
 		$env:PKR_VAR_pxeboot = "true"
 	} else {
 		Write-Host ":: Pxe boot on ubuntu nor rockylinux is supported"
+	}
+}
+if ($PxeServe) {
+	if ($Archlinux) {
+		Write-Host ":: Pxe providing boot services enabled"
+		$env:PKR_VAR_pxeserve = "true"
+	} else {
+		Write-Host ":: Pxe serving on ubuntu nor rockylinux is supported"
 	}
 }
 if ($PxeImage) {

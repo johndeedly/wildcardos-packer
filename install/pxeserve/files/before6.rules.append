@@ -1,0 +1,7 @@
+
+*nat
+:POSTROUTING ACCEPT [0:0]
+
+-A POSTROUTING -s 2001:db8:7b::/48 ! -d 2001:db8:7b::/48 -j MASQUERADE
+
+COMMIT

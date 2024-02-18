@@ -52,3 +52,7 @@ fi
 if [[ ${TAGS[@]} =~ "pxeboot" ]]; then
   source "${SCRIPTDIR}/pxeboot/main.sh"
 fi
+
+if [[ ${TAGS[@]} =~ "pxeserve" ]]; then
+  source "${SCRIPTDIR}/pxeserve/main.sh"
+fi
