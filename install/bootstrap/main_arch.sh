@@ -6,7 +6,7 @@ pacman_whenneeded nano neovim htop btop dialog git ufw \
   dotnet-host dotnet-sdk dotnet-runtime aspnet-runtime \
   python python-pip words python-setuptools python-wheel \
   wireguard-tools wget nfs-utils ncdu viu core/man man-pages-de trash-cli \
-  gvfs gvfs-smb sshfs cifs-utils \
+  gvfs gvfs-smb sshfs cifs-utils gnome-keyring \
   unzip p7zip rsync mc lf fzf xdg-user-dirs xdg-utils \
   starship ttf-nerd-fonts-symbols powershell-bin
 

@@ -43,7 +43,7 @@ PACKAGE_LIST=(
     libreoffice-l10n-de
     krita
     evolution
-    gnome-keyring
+    seahorse
     freerdp2-x11
     notepadqq
     gitg

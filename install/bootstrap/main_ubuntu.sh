@@ -20,7 +20,7 @@ pacman_whenneeded nano neovim htop btop dialog git \
     dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0 \
     python-is-python3 python3-pip wngerman python3-setuptools python3-wheel \
     openssh-server openssh-client ufw wireguard-tools wget \
-    gvfs gvfs-backends sshfs cifs-utils nfs-kernel-server \
+    gvfs gvfs-backends sshfs cifs-utils nfs-kernel-server gnome-keyring \
     unzip p7zip rsync \
     xdg-user-dirs xdg-utils
 

@@ -56,7 +56,7 @@ PACKAGE_LIST=(
     libreoffice-fresh-de
     krita
     evolution
-    gnome-keyring
+    seahorse
     freerdp
     notepadqq
     gitg
