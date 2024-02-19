@@ -67,8 +67,7 @@ log_text "Install and configure base packages needed for graphical environments"
 pacman_whenneeded ${PACKAGE_LIST[@]}
 
 log_text "Disable and mask light display manager, thanks ubuntu"
-systemctl disable lightdm
-systemctl mask lightdm
+systemctl mask lightdm.service
 
 log_text "Reenable ly display manager, thanks ubuntu"
 systemctl enable ly
