@@ -77,6 +77,6 @@ PYTHONUSERBASE=$ROOTHOME/.local python3 -m pip install --user --break-system-pac
 PYTHONUSERBASE=/etc/skel/.local python3 -m pip install --user --break-system-packages --no-warn-script-location xkcdpass || true
 
 log_text "Install PowerShell"
-wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb -O powershell.deb
-apt -y install powershell.deb
-rm powershell.deb
+curl -sL https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb > ./powershell.deb
+apt -y install ./powershell.deb
+rm ./powershell.deb
