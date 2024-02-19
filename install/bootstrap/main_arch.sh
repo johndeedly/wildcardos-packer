@@ -15,7 +15,7 @@ systemctl enable systemd-networkd systemd-resolved systemd-homed sshd ufw ly
 
 log_text "Disable tty login"
 systemctl mask console-getty.service
-for i in {1..9}; do
+for i in {1..31}; do
   systemctl mask getty@tty${i}.service
 done
 

@@ -59,7 +59,7 @@ systemctl disable nfs-server nfs-blkmap
 
 log_text "Disable tty login"
 systemctl mask console-getty.service
-for i in {1..9}; do
+for i in {1..31}; do
   systemctl mask getty@tty${i}.service
 done
 
