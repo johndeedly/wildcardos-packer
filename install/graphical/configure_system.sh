@@ -71,8 +71,8 @@ EOS
 
 log_text "Set xdg-settings defaults"
 su -s /bin/bash -l $USERID <<EOS
-xdg-settings set default-web-browser org.mozilla.firefox.desktop
-xdg-settings set default-url-scheme-handler mailto org.gnome.Evolution.desktop
+xdg-settings set default-web-browser org.mozilla.firefox.desktop || log_error "Could not set default browser"
+xdg-settings set default-url-scheme-handler mailto org.gnome.Evolution.desktop || log_error "Could not set default email program"
 EOS
 
 log_text "Enable xrdp service"
