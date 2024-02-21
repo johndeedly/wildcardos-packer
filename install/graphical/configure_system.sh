@@ -7,8 +7,10 @@ cp ${SCRIPTDIR}/graphical/files/30-touchpad.conf /etc/X11/xorg.conf.d/
 log_text "Set keyboard regionals for X11"
 cp ${SCRIPTDIR}/graphical/files/00-keyboard.conf /etc/X11/xorg.conf.d/
 
-log_text "Enable software cursor in virtual environments"
-cp ${SCRIPTDIR}/graphical/files/05-swcursor.conf /etc/X11/xorg.conf.d/
+if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
+    log_text "Enable software cursor in virtual environments"
+    cp ${SCRIPTDIR}/graphical/files/05-swcursor.conf /etc/X11/xorg.conf.d/
+fi
 
 log_text "Copy slock_run"
 cp ${SCRIPTDIR}/graphical/files/slock_run /usr/local/bin/

@@ -51,7 +51,7 @@ if [ "x${GPU_HITS[@]}" != "x" ]; then
     done
 fi
 INSTALLED_HARDWARE_VIRTUAL_MACHINE=""
-if [ $QEMU_HITS -gt 0 ] || [ $VMWARE_HITS -gt 0 ] || [ $ORACLE_HITS -gt 0 ] || [[ ${TAGS[@]} =~ "pxeimage" ]]; then
+if [ $QEMU_HITS -gt 0 ] || [ $VMWARE_HITS -gt 0 ] || [ $ORACLE_HITS -gt 0 ]; then
     INSTALLED_HARDWARE_VIRTUAL_MACHINE="YES"
 fi
 INSTALLED_HARDWARE_CPU_AMD=""
