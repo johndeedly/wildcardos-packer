@@ -16,7 +16,7 @@ log_text "Save some storage space (unneeded manuals in other languages and bogus
 sed -i 's/^#\?NoExtract.*/NoExtract = usr\/share\/help\/* !usr\/share\/help\/C\/* !usr\/share\/help\/de*\/* !usr\/share\/help\/en*\/*\nNoExtract = usr\/share\/man\/* !usr\/share\/man\/de*\/* !usr\/share\/man\/man*\/*\nNoExtract = usr\/share\/backgrounds\/*\/* !usr\/share\/backgrounds\/archlinux\/*/' /etc/pacman.conf
 
 log_text "Refresh pacman"
-pacman -Syy
+pacman -Syy --noconfirm --needed --noprogressbar --color=auto
 
 log_text "Enable chaotic-aur repository"
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -30,4 +30,4 @@ Include = /etc/pacman.d/chaotic-mirrorlist
 EOF
 
 log_text "Refresh pacman again"
-pacman -Syy
+pacman -Syyuu --noconfirm --needed --noprogressbar --color=auto
