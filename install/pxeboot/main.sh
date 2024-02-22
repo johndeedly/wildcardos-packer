@@ -1,24 +1,6 @@
 #!/usr/bin/env bash
 
-log_text "Integrity check"
-if ! mountpoint -q -- ${MOUNTPOINT%%/}; then
-  log_error "${MOUNTPOINT%%/} doesn't appear to be mounted, aborting to prevent accidentally filling up the main filesystem"
-  exit 1
-elif [ ! -d /share ]; then
-  log_error "/share doesn't exist"
-  exit 2
-elif ! mountpoint -q -- /share; then
-    if mountpoint -q -- ${MOUNTPOINT%%/}/share; then
-        umount ${MOUNTPOINT%%/}/share
-        mkdir -m777 -p /share
-        mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || mount -t vboxsf -o rw host.0 /share
-    else
-        log_error "/share doesn't appear to be mounted, aborting to prevent accidentally filling up the main filesystem"
-        exit 3
-    fi
-fi
-
-log_text "Install pxe boot setup"8
+log_text "Install pxe boot setup"
 pacman_whenneeded mkinitcpio-nfs-utils curl ca-certificates-utils cifs-utils nfs-utils nbd
 # TODO: why are files from linux-firmware conflicting with these packages?
 pacman -S --overwrite=\* --noconfirm --noprogressbar --needed amd-ucode intel-ucode
@@ -53,13 +35,16 @@ done
 unset item
 unset ITER
 
-# fix file access
+log_text "Fix file access"
 chown -R ${ROOTID}:${ROOTGRP} /srv/tftp
 find /srv/tftp -type d -exec chmod 755 {} \;
 find /srv/tftp -type f -exec chmod 644 {} \;
 
-log_text "Copy tftp folder to share"
-if [ ! -f /share/pxe/tftp/efi64/arch/x86_64/vmlinuz-linux ]; then
-  mkdir -p /share/pxe/tftp
-  cp -r /srv/tftp/* /share/pxe/tftp/
+if mountpoint -q -- /share; then
+  log_text "Share is a mountpoint"
+  if [ ! -f /share/pxe/tftp/efi64/arch/x86_64/vmlinuz-linux ]; then
+    log_text "Copy tftp folder to share"
+    mkdir -p /share/pxe/tftp
+    cp -r /srv/tftp/* /share/pxe/tftp/
+  fi
 fi
