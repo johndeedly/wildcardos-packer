@@ -36,7 +36,7 @@ elif [[ "$DMIDECODE_SYSTEM_PRODUCT_NAME" =~ VirtualBox ]]; then
 elif [[ "$DMIDECODE_SYSTEM_MANUFACTURER" =~ QEMU ]]; then
     log_text "Running inside QEMU"
     RUNTIME_ENVIRONMENT_QEMU="YES"
-elif [[ "$DMIDECODE_SYSTEM_MANUFACTURER" =~ Microsoft ]] && [[ "$(dmidecode | grep -E -i 'product')" =~ Virtual ]]; then
+elif [[ "$DMIDECODE_SYSTEM_MANUFACTURER" =~ Microsoft ]] && [[ "$DMIDECODE_SYSTEM_PRODUCT_NAME" =~ Virtual ]]; then
     log_text "Running inside VirtualPC"
     RUNTIME_ENVIRONMENT_VIRTUALPC="YES"
 elif dmidecode | grep -E 'domU'; then

@@ -28,7 +28,7 @@ while [ $# -gt 0 ]; do
             shift
             shift
             ;;
-        -s|--SCRIPTDIR)
+        -s|--scriptdir)
             SCRIPTDIR="$2"
             shift
             shift
