@@ -130,6 +130,9 @@ switch-windows=['<Super>Tab']
 switch-windows-backward=['<Shift><Super>Tab']
 toggle-maximized=['<Super>f']
 unmaximize=@as []
+
+[settings-daemon/plugins/power]
+button-power='shutdown'
 EOX
 dbus-run-session -- bash -c 'XDG_CONFIG_HOME="${USERHOME}"/.config dconf load /org/cinnamon/ < "${USERHOME}"/dconf-dump.ini'
 /usr/bin/rm "${USERHOME}"/dconf-dump.ini

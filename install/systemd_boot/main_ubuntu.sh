@@ -16,7 +16,7 @@ arch-chroot ${MOUNTPOINT%%/} bootctl --esp-path=/boot install
 
 log_text "Configure facts"
 ROOTUUID=$(blkid ${PART_ROOT} -s UUID -o value)
-BOOTOPTIONS="options root=UUID=${ROOTUUID} rootflags=subvol=@ rw loglevel=3 acpi_osi=Linux"
+BOOTOPTIONS="options root=UUID=${ROOTUUID} rootflags=subvol=@ rw loglevel=3 acpi=force acpi_osi=Linux"
 
 log_text "Default kernel boot option"
 mkdir -p ${MOUNTPOINT%%/}/boot/loader/entries

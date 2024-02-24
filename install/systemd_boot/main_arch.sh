@@ -14,7 +14,7 @@ arch-chroot ${MOUNTPOINT%%/} bootctl --esp-path=/boot install
 
 log_text "Configure facts"
 ROOTUUID=$(blkid ${PART_ROOT} -s UUID -o value)
-BOOTOPTIONS="options root=UUID=${ROOTUUID} rootflags=subvol=@ rw loglevel=3 acpi_osi=Linux"
+BOOTOPTIONS="options root=UUID=${ROOTUUID} rootflags=subvol=@ rw loglevel=3 acpi=force acpi_osi=Linux"
 AMDINITRDOPTS=""
 if [ -n "$INSTALLED_HARDWARE_CPU_AMD" ]; then
     AMDINITRDOPTS="initrd  /amd-ucode.img"
