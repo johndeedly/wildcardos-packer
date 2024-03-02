@@ -71,20 +71,21 @@ if ($Bootstrap) {
 	Write-Host ":: Bootstrap stage enabled"
 	$env:PKR_VAR_bootstrap = "true"
 }
+if ($PxeServe) {
+	if ($Archlinux) {
+		$PxeBoot=$True
+		Write-Host ":: Pxe providing boot services enabled"
+		$env:PKR_VAR_pxeserve = "true"
+	} else {
+		Write-Host ":: Pxe serving on ubuntu nor rockylinux is supported"
+	}
+}
 if ($PxeBoot) {
 	if ($Archlinux) {
 		Write-Host ":: Pxe boot enabled"
 		$env:PKR_VAR_pxeboot = "true"
 	} else {
 		Write-Host ":: Pxe boot on ubuntu nor rockylinux is supported"
-	}
-}
-if ($PxeServe) {
-	if ($Archlinux) {
-		Write-Host ":: Pxe providing boot services enabled"
-		$env:PKR_VAR_pxeserve = "true"
-	} else {
-		Write-Host ":: Pxe serving on ubuntu nor rockylinux is supported"
 	}
 }
 if ($PxeImage) {
