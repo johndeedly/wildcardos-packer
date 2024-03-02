@@ -28,7 +28,7 @@ write_files:
   # the path year/month/day is resolved and modified through pipeline.ps1
   - path: /etc/pacman.d/mirrorlist
     content: |
-      Server=https://archive.archlinux.org/repos/2024/02/01/$repo/os/$arch
+      Server=https://archive.archlinux.org/repos/2024/03/01/$repo/os/$arch
     owner: 'root:root'
     permissions: '0644'
   # enable german keyboard

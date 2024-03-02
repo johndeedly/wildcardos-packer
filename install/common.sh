@@ -18,7 +18,7 @@ function log_error() {
 
 function archiso_pacman_whenneeded() {
     log_text "Install package(s) ${*// /,}"
-    /usr/bin/pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
+    /usr/bin/pacman -Sy --disable-download-timeout --noconfirm --needed --noprogressbar --color=auto $*
 }
 
 if [[ ${TAGS[@]} =~ "archlinux" ]]; then

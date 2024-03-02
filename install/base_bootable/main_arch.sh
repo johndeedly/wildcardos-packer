@@ -37,6 +37,7 @@ if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
 fi
 
 log_text "Create a basic system inside the mountpoint folder"
+sed -i 's/pacman -r/pacman --disable-download-timeout -r/' /usr/bin/pacstrap
 pacstrap -K -M -c ${MOUNTPOINT%%/} ${PACKAGE_LIST[@]}
 
 if [ $? -ne 0 ]; then

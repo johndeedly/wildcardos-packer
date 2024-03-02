@@ -134,7 +134,7 @@ if (-Not (Test-Path($localpath))) {
 }
 
 $datestr = $env:PKR_VAR_yearmonthday.replace('.', '/')
-(((Get-Content 'CIDATA/user-data') -replace 'Server=.*?$', "Server=https://archive.archlinux.org/repos/$($datestr)/`$repo/os/`$arch") -join "`n") + "`n" | Set-Content -NoNewline -Encoding UTF8NoBOM -Force 'CIDATA/user-data'
+(((Get-Content 'CIDATA/user-data') -replace 'Server=.*?$', "Server=https://archive.archlinux.org/repos/$($datestr)/`$repo/os/`$arch") -join "`n") + "`n" | Set-Content -NoNewline -Encoding Ascii -Force 'CIDATA/user-data'
 
 function Packer-BuildAppliance {
 	param([Parameter()][string]$SearchFileName, [Parameter()][string]$Filter, [Parameter()][string]$ArgList)
