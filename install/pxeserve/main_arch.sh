@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 log_text "Install packages needed for pxe boot"
-pacman_whenneeded syslinux darkhttpd nfs-utils nbd samba dnsmasq
+pacman_whenneeded syslinux darkhttpd nfs-utils nbd samba dnsmasq targetcli-fb python-rtslib-fb python-configshell-fb
 
 log_text "Configure network"
 DHCP_ADDITIONAL_SETUP=(
@@ -103,13 +103,32 @@ log_text "Configure cifs"
 mkdir -p /srv/cifs/arch/x86_64
 cp ${SCRIPTDIR}/pxeserve/files/smb.conf /etc/samba/smb.conf
 
+log_text "Prepare iscsi (targetcli only usable after first boot)"
+mkdir -p /etc/target /srv/iscsi/arch/x86_64
+cp ${SCRIPTDIR}/pxeserve/files/saveconfig.json /etc/target/saveconfig.json
+#
+# targetcli <<EOS
+# cd /backstores/fileio
+# create arch /srv/iscsi/arch/x86_64/pxeboot.img write_back=false
+# cd /iscsi
+# create iqn.2003-01.internal.pxe:arch
+# cd iqn.2003-01.internal.pxe:arch/tpg1/luns
+# create /backstores/fileio/arch
+# cd iqn.2003-01.internal.pxe:arch/tpg1/acls
+# create iqn.2003-01.internal.pxeboot
+# cd iqn.2003-01.internal.pxeboot/
+# delete mapped_lun=0
+# create mapped_lun=0 tpg_lun_or_backstore=/backstores/fileio/arch write_protect=1
+# EOS
+#
+
 log_text "Change default access rights"
 chown -R root:root /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs
 find /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs -type d -exec chmod 755 {} \;
 find /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs -type f -exec chmod 644 {} \;
 
 log_text "Enable all configured services"
-systemctl enable dnsmasq nfs-server nbd smb wireguard darkhttpd
+systemctl enable dnsmasq nfs-server nbd smb wireguard darkhttpd target
 
 log_text "Allow pxe protocols"
 ufw disable
@@ -130,6 +149,7 @@ ufw allow in on eth1 to any port 20048 comment 'nfs on intern'
 ufw allow in on eth1 to any port nbd comment 'nbd on intern'
 ufw allow in on eth1 to any port 445 comment 'cifs on intern'
 ufw allow in on eth1 to any port 139 comment 'cifs on intern'
+ufw allow in on eth1 to any port 3260 comment 'iscsi on intern'
 ufw allow in on eth1 to any port 8443 comment 'step-ca on intern'
 ufw allow in on eth1 to any port 51820 comment 'wireguard on intern'
 ufw route allow in on eth1 out on wg0 comment 'allow forward from intern to wireguard'

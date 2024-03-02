@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 log_text "Install pxe boot setup"
-pacman_whenneeded mkinitcpio-nfs-utils curl ca-certificates-utils cifs-utils nfs-utils nbd
+pacman_whenneeded mkinitcpio-nfs-utils curl ca-certificates-utils cifs-utils nfs-utils nbd open-iscsi
 # TODO: why are files from linux-firmware conflicting with these packages?
 pacman -S --overwrite=\* --noconfirm --noprogressbar --needed amd-ucode intel-ucode
 

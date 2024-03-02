@@ -170,6 +170,22 @@ if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" ]]; then
     source "${SCRIPTDIR}/systemd_boot/main.sh"
 fi
 
+if [[ ${TAGS[@]} =~ "pxeserve" ]]; then
+    log_text "Create proof of concept pxe boot with archiso image"
+    cp -a /run/archiso/bootmnt/arch/x86_64/airootfs.sfs ${MOUNTPOINT%%/}/srv/http/arch/x86_64/pxeboot.img
+    cp -a /run/archiso/bootmnt/arch/x86_64/airootfs.sfs ${MOUNTPOINT%%/}/srv/nfs/arch/x86_64/pxeboot.img
+    cp -a /run/archiso/bootmnt/arch/x86_64/airootfs.sfs ${MOUNTPOINT%%/}/srv/nbd/arch/x86_64/pxeboot.img
+    cp -a /run/archiso/bootmnt/arch/x86_64/airootfs.sfs ${MOUNTPOINT%%/}/srv/cifs/arch/x86_64/pxeboot.img
+    cp -a /run/archiso/bootmnt/arch/x86_64/airootfs.sfs ${MOUNTPOINT%%/}/srv/iscsi/arch/x86_64/pxeboot.img
+    cp -a /run/archiso/bootmnt/boot/syslinux/splash.png ${MOUNTPOINT%%/}/srv/tftp/bios/
+    cp -a /run/archiso/bootmnt/boot/syslinux/splash.png ${MOUNTPOINT%%/}/srv/tftp/efi32/
+    cp -a /run/archiso/bootmnt/boot/syslinux/splash.png ${MOUNTPOINT%%/}/srv/tftp/efi64/
+    log_text "Fix file ownership and access permissions"
+    chown -R root:root ${MOUNTPOINT%%/}/srv/tftp ${MOUNTPOINT%%/}/srv/http ${MOUNTPOINT%%/}/srv/nfs ${MOUNTPOINT%%/}/srv/cifs ${MOUNTPOINT%%/}/srv/iscsi
+    find ${MOUNTPOINT%%/}/srv/tftp ${MOUNTPOINT%%/}/srv/http ${MOUNTPOINT%%/}/srv/nfs ${MOUNTPOINT%%/}/srv/cifs ${MOUNTPOINT%%/}/srv/iscsi -type d -exec chmod 755 {} \;
+    find ${MOUNTPOINT%%/}/srv/tftp ${MOUNTPOINT%%/}/srv/http ${MOUNTPOINT%%/}/srv/nfs ${MOUNTPOINT%%/}/srv/cifs ${MOUNTPOINT%%/}/srv/iscsi -type f -exec chmod 644 {} \;
+fi
+
 if [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     log_text "Requested building of squashfs image"
     source "${SCRIPTDIR}/pxeimage/main.sh"
