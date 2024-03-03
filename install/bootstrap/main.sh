@@ -55,10 +55,18 @@ ufw enable
 
 log_text "Create user homes on login"
 # see https://wiki.archlinux.org/title/LDAP_authentication for more details
-sed -i 's/session\s\+required\s\+pam_env.so/session    required   pam_env.so\nsession    required   pam_mkhomedir.so     skel=\/etc\/skel umask=0077/' /etc/pam.d/system-login
+# TODO: on ubuntu system-login is missing - investigate!
+if [ -f /etc/pam.d/system-login ]; then
+    sed -i 's/session\s\+required\s\+pam_env.so/session    required   pam_env.so\nsession    required   pam_mkhomedir.so     skel=\/etc\/skel umask=0077/' /etc/pam.d/system-login
+fi
 
 log_text "Append gnome keyring to pam login"
 # see https://wiki.archlinux.org/title/GNOME/Keyring#PAM_step
-sed -i 's/auth\s\+include\s\+system-local-login/auth       include      system-local-login\nauth       optional     pam_gnome_keyring.so/' /etc/pam.d/login
-sed -i 's/session\s\+include\s\+system-local-login/session    include      system-local-login\nsession    optional     pam_gnome_keyring.so auto_start/' /etc/pam.d/login
-sed -i 's/password\s\+include\s\+system-auth/password        include         system-auth\npassword        optional        pam_gnome_keyring.so/' /etc/pam.d/passwd
+# TODO: protection from upper error
+if [ -f /etc/pam.d/login ]; then
+    sed -i 's/auth\s\+include\s\+system-local-login/auth       include      system-local-login\nauth       optional     pam_gnome_keyring.so/' /etc/pam.d/login
+    sed -i 's/session\s\+include\s\+system-local-login/session    include      system-local-login\nsession    optional     pam_gnome_keyring.so auto_start/' /etc/pam.d/login
+fi
+if [ -f /etc/pam.d/passwd ]; then
+    sed -i 's/password\s\+include\s\+system-auth/password        include         system-auth\npassword        optional        pam_gnome_keyring.so/' /etc/pam.d/passwd
+fi
