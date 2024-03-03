@@ -37,6 +37,8 @@ PACKAGE_LIST=(
     wofi
     dex
     xrdp
+    ibus
+    ibus-typing-booster
     # wallpapers fonts and icons
     archlinux-wallpaper
     elementary-wallpapers

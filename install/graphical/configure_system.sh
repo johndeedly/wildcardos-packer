@@ -7,6 +7,26 @@ cp ${SCRIPTDIR}/graphical/files/30-touchpad.conf /etc/X11/xorg.conf.d/
 log_text "Set keyboard regionals for X11"
 cp ${SCRIPTDIR}/graphical/files/00-keyboard.conf /etc/X11/xorg.conf.d/
 
+log_text "Enable ibus environment"
+tee -a /etc/environment <<EOF
+GTK_IM_MODULE=ibus
+QT_IM_MODULE=ibus
+XMODIFIERS=@im=ibus
+EOF
+mkdir -p "/etc/xdg/autostart"
+tee /etc/xdg/autostart/ibus-daemon.desktop <<EOF
+[Desktop Entry]
+Name=IBus
+GenericName=Input Method Framework
+Comment=Start IBus Input Method Framework
+Exec=ibus-daemon -rxR
+Icon=ibus
+NoDisplay=true
+Type=Application
+Categories=System;Utility;
+EOF
+chmod a+x /etc/xdg/autostart/ibus-daemon.desktop
+
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
     log_text "Enable software cursor in virtual environments"
     cp ${SCRIPTDIR}/graphical/files/05-swcursor.conf /etc/X11/xorg.conf.d/
