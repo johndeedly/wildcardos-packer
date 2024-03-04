@@ -15,16 +15,18 @@ fi
 log_text "Create user skeleton"
 source "${SCRIPTDIR}/bootstrap/skeleton.sh"
 
-log_text "Install NvChad environment"
+log_text "Prepare NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
 mkdir -p "${USERHOME}/.config" "${USERHOME}/.local/share"
 git clone 'https://github.com/NvChad/NvChad' "${USERHOME}/.config/nvim" --depth 1
 EOS
 cp -r ${SCRIPTDIR}/bootstrap/nvim-lua-custom "${USERHOME}/.config/nvim/lua/custom"
 chown -R "${USERID}:${USERGRP}" "${USERHOME}/.config/nvim/lua/custom"
+log_text "Setup NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
 nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":MasonInstallAll" -c ":TSInstall all" -c ":Lazy sync | Lazy load all" -c ":qall!" || true
 EOS
+log_text "Mirror NvChad environment"
 mkdir -p /etc/skel/.config/nvim /etc/skel/.local/share/nvim \
   "${ROOTHOME}/.config/nvim" "${ROOTHOME}/.local/share/nvim"
 cp -r "${USERHOME}/.config/nvim/"* /etc/skel/.config/nvim/

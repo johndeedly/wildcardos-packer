@@ -44,7 +44,13 @@ local plugins = {
       require("better_escape").setup()
     end,
   },
-  
+
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = true,
+  },
+
   -- community plugins
   {
     "NvChad/nvcommunity",

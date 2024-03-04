@@ -13,7 +13,7 @@ log_text "Update package cache"
 apt update
 
 log_text "Install and configure base packages needed for everything else"
-pacman_whenneeded nano neovim htop btop dialog git \
+pacman_whenneeded nano npm neovim htop btop dialog git \
     bash-completion ncdu rustc cargo pv mc lfm fzf \
     lshw libxml2 jq \
     polkitd man manpages-de trash-cli \
