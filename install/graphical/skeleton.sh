@@ -90,3 +90,11 @@ cp ${SCRIPTDIR}/graphical/files/Xresources /etc/skel/.Xresources
 cp ${SCRIPTDIR}/graphical/files/Xresources "${USERHOME}"/.Xresources
 chown "${USERID}:${USERGRP}" "${USERHOME}"/.Xresources
 cp ${SCRIPTDIR}/graphical/files/Xresources "${ROOTHOME}"/.Xresources
+
+log_text Create skeleton for kitty
+mkdir -p /etc/skel/.config/kitty "${ROOTHOME}"/.config/kitty "${USERHOME}"/.config/kitty
+chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/kitty
+cp ${SCRIPTDIR}/graphical/files/kitty.conf /etc/skel/.config/kitty/kitty.conf
+cp ${SCRIPTDIR}/graphical/files/kitty.conf "${USERHOME}"/.config/kitty/kitty.conf
+chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/kitty/kitty.conf
+cp ${SCRIPTDIR}/graphical/files/kitty.conf "${ROOTHOME}"/.config/kitty/kitty.conf

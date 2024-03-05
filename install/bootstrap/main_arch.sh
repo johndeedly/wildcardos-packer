@@ -8,7 +8,7 @@ pacman_whenneeded nano npm neovim htop btop dialog git ufw \
   wireguard-tools wget nfs-utils ncdu viu core/man man-pages-de trash-cli \
   gvfs gvfs-smb sshfs cifs-utils gnome-keyring \
   unzip p7zip rsync mc lf fzf xdg-user-dirs xdg-utils \
-  starship ttf-nerd-fonts-symbols powershell-bin
+  starship ttf-terminus-nerd ttf-nerd-fonts-symbols powershell-bin
 
 log_text "Enable system packages"
 systemctl enable systemd-networkd systemd-resolved systemd-homed sshd ufw ly
