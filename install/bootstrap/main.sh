@@ -24,9 +24,7 @@ cp -r ${SCRIPTDIR}/bootstrap/nvim-lua-custom "${USERHOME}/.config/nvim/lua/custo
 chown -R "${USERID}:${USERGRP}" "${USERHOME}/.config/nvim/lua/custom"
 log_text "Setup NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
-nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":Lazy sync | Lazy load all" -c ":qall!" || true
-nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":TSInstall all" -c ":qall!" || true
-nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":MasonInstallAll" -c ":qall!" || true
+nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":Lazy sync | Lazy load all" -c ":MasonInstallAll" -c ":TSInstall all" -c ":qall!" || true
 EOS
 log_text "Mirror NvChad environment"
 mkdir -p /etc/skel/.config/nvim /etc/skel/.local/share/nvim \
