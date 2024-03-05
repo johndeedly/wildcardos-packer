@@ -41,7 +41,7 @@ exec='kitty'
 exec-arg='--'
 
 [desktop/keybindings]
-custom-list=['__dummy__', 'custom0', 'custom1', 'custom2', 'custom3']
+custom-list=['__dummy__', 'custom0', 'custom1', 'custom2', 'custom3', 'custom4']
 looking-glass-keybinding=@as []
 pointer-next-monitor=@as []
 pointer-previous-monitor=@as []
@@ -66,6 +66,11 @@ name='lf'
 binding=['<Alt>w']
 command='chromium'
 name='chromium'
+
+[desktop/keybindings/custom-keybindings/custom4]
+binding=['<Control><Shift>e']
+command='ibus emoji'
+name='emoji picker'
 
 [desktop/keybindings/media-keys]
 calculator=@as []
@@ -124,8 +129,10 @@ switch-to-workspace-9=['<Super>9']
 switch-to-workspace-10=@as []
 switch-to-workspace-11=@as []
 switch-to-workspace-12=@as []
+switch-to-workspace-down=['<Super>Down']
 switch-to-workspace-left=['<Super>Left']
 switch-to-workspace-right=['<Super>Right']
+switch-to-workspace-up=['<Super>Up']
 switch-windows=['<Super>Tab']
 switch-windows-backward=['<Shift><Super>Tab']
 toggle-maximized=['<Super>f']
