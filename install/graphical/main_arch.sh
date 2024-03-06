@@ -42,7 +42,7 @@ PACKAGE_LIST=(
     # wallpapers fonts and icons
     archlinux-wallpaper
     elementary-wallpapers
-    papirus-icon-theme
+    elementary-icon-theme
     ttf-dejavu
     ttf-dejavu-nerd
     ttf-liberation

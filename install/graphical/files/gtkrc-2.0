@@ -1,5 +1,5 @@
 gtk-can-change-accels = 1
-gtk-icon-theme-name = "Papirus"
+gtk-icon-theme-name = "elementary"
 gtk-fallback-icon-theme = "Adwaita"
 gtk-theme-name = "Adwaita"
 style "user-font"

@@ -33,6 +33,9 @@ primary-color='000000'
 secondary-color='000000'
 draw-background=true
 
+[desktop/interface]
+icon-theme='elementary'
+
 [desktop/applications/calculator]
 exec='qalculate-gtk'
 

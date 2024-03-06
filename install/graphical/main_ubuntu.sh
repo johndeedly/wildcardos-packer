@@ -37,7 +37,7 @@ PACKAGE_LIST=(
     ibus
     ibus-typing-booster
     # wallpapers fonts and icons
-    papirus-icon-theme
+    elementary-icon-theme
     fonts-dejavu
     # complementary programs
     # firefox and chromium are flatpaks now

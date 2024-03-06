@@ -4,8 +4,6 @@ log_text "List of basic packages to create a system with graphical support"
 PACKAGE_LIST=(
     cinnamon
     cinnamon-translations
-    gnome-icon-theme-symbolic
-    gnome-icon-theme
     networkmanager
     system-config-printer
 )
