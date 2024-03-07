@@ -17,7 +17,7 @@ pacman_whenneeded nano npm neovim htop btop dialog git \
     bash-completion ncdu rustc cargo pv mc lfm fzf \
     lshw libxml2 jq \
     polkitd man manpages-de trash-cli \
-    dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0 openjdk-18-jdk \
+    dotnet-sdk-8.0 dotnet-runtime-8.0 aspnetcore-runtime-8.0 openjdk-22-jdk \
     python-is-python3 python3-pip wngerman python3-setuptools python3-wheel \
     openssh-server openssh-client ufw wireguard-tools wget \
     gvfs gvfs-backends sshfs cifs-utils nfs-kernel-server gnome-keyring \
