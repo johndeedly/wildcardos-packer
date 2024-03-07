@@ -168,11 +168,11 @@ source "virtualbox-iso" "default" {
   guest_additions_mode     = "disable"
   guest_os_type            = "ArchLinux_64"
   hard_drive_discard       = true
-  hard_drive_interface     = "sata"
+  hard_drive_interface     = "virtio"
   hard_drive_nonrotational = true
   headless                 = var.headless
   iso_checksum             = "none"
-  iso_interface            = "sata"
+  iso_interface            = "virtio"
   iso_url                  = "archlinux-${var.yearmonthday}-x86_64.iso"
   output_directory         = "output/${var.build_arch}-${var.stage}"
   output_filename          = "../wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64"
