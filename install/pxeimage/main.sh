@@ -8,14 +8,18 @@ elif [ ! -d /share ]; then
   log_error "/share doesn't exist"
   exit 2
 elif ! mountpoint -q -- /share; then
-    if mountpoint -q -- ${MOUNTPOINT%%/}/share; then
-        umount ${MOUNTPOINT%%/}/share
-        mkdir -m777 -p /share
-        mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share || mount -t vboxsf -o rw host.0 /share
-    else
-        log_error "/share doesn't appear to be mounted, aborting to prevent accidentally filling up the main filesystem"
-        exit 3
+  if mountpoint -q -- ${MOUNTPOINT%%/}/share; then
+    umount ${MOUNTPOINT%%/}/share
+    mkdir -m777 -p /share
+    if [ -n "$RUNTIME_ENVIRONMENT_VIRTUALBOX" ]; then
+      mount -t vboxsf -o rw host.0 /share
+    elif [ -n "$RUNTIME_ENVIRONMENT_QEMU" ]; then
+      mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 /share
     fi
+  else
+    log_error "/share doesn't appear to be mounted, aborting to prevent accidentally filling up the main filesystem"
+    exit 3
+  fi
 fi
 
 log_text "Fixating pxe boot image"

@@ -48,7 +48,11 @@ chmod 755 ${MOUNTPOINT%%/}/opt
 if mountpoint -q -- /share; then
   mkdir -m777 ${MOUNTPOINT%%/}/share
   umount /share
-  mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 ${MOUNTPOINT%%/}/share || mount -t vboxsf -o rw host.0 ${MOUNTPOINT%%/}/share
+  if [ -n "$RUNTIME_ENVIRONMENT_VIRTUALBOX" ]; then
+    mount -t vboxsf -o rw host.0 ${MOUNTPOINT%%/}/share
+  elif [ -n "$RUNTIME_ENVIRONMENT_QEMU" ]; then
+    mount -t 9p -o trans=virtio,version=9p2000.L,rw host.0 ${MOUNTPOINT%%/}/share
+  fi
 fi
 
 if [[ ${TAGS[@]} =~ "dualboot" ]]; then
