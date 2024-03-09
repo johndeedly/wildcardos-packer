@@ -190,8 +190,3 @@ if [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     log_text "Requested building of squashfs image"
     source "${SCRIPTDIR}/pxeimage/main.sh"
 fi
-
-if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" ]]; then
-    log_text "Filesystem services"
-    source "${SCRIPTDIR}/filesystem_services/main.sh"
-fi

@@ -49,6 +49,11 @@ if [[ ${TAGS[@]} =~ "cinnamon" ]]; then
   source "${SCRIPTDIR}/cinnamon/main.sh"
 fi
 
+if [[ ${TAGS[@]} =~ "target_host" || ${TAGS[@]} =~ "target_guest" ]]; then
+    log_text "Filesystem services"
+    source "${SCRIPTDIR}/filesystem_services/main.sh"
+fi
+
 if [[ ${TAGS[@]} =~ "pxeboot" ]]; then
   source "${SCRIPTDIR}/pxeboot/main.sh"
 fi
