@@ -69,12 +69,12 @@ log_text "Install and configure base packages needed for graphical environments"
 pacman_whenneeded ${PACKAGE_LIST[@]}
 
 log_text "Disable and mask light display manager, thanks ubuntu"
-systemctl disable display-manager
-systemctl mask lightdm.service
-rm /etc/systemd/system/display-manager.service
+systemctl disable lightdm
+rm /etc/systemd/system/display-manager.service || true
 
 log_text "Reenable ly display manager, thanks ubuntu"
 systemctl enable ly
+ln -s /usr/lib/systemd/system/ly.service /etc/systemd/system/display-manager.service || true
 
 log_text "Add flathub repo to system when not present"
 flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
