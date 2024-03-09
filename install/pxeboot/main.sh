@@ -6,9 +6,11 @@ pacman_whenneeded mkinitcpio-nfs-utils curl ca-certificates-utils cifs-utils nfs
 pacman -S --overwrite=\* --noconfirm --noprogressbar --needed amd-ucode intel-ucode
 
 log_text "Create skeleton for pxe boot mkinitcpio"
-mkdir -p /usr/lib/initcpio/{install,hooks}
-cp "${SCRIPTDIR}"/pxeboot/install/* /usr/lib/initcpio/install/
-cp "${SCRIPTDIR}"/pxeboot/hooks/* /usr/lib/initcpio/hooks/
+mkdir -p /etc/initcpio/{install,hooks}
+cp "${SCRIPTDIR}"/pxeboot/install/* /etc/initcpio/install/
+chmod a+x /etc/initcpio/install/*
+cp "${SCRIPTDIR}"/pxeboot/hooks/* /etc/initcpio/hooks/
+chmod a+x /etc/initcpio/hooks/*
 mkdir -p /etc/mkinitcpio{,.conf}.d
 cp "${SCRIPTDIR}"/pxeboot/pxe.conf /etc/
 cp "${SCRIPTDIR}"/pxeboot/pxe.preset /etc/mkinitcpio.d/
