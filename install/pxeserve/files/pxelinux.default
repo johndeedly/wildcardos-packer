@@ -34,14 +34,14 @@ LABEL ArchNFS
 MENU LABEL Boot Arch Linux using NFS
 LINUX arch/x86_64/vmlinuz-linux
 INITRD arch/intel-ucode.img,arch/amd-ucode.img,arch/x86_64/initramfs-linux-pxe.img
-APPEND pxe_nfs_srv=${pxeserver}:/srv/nfs copytoram=n cow_spacesize=75%
+APPEND pxe_nfs_srv=${pxeserver}:/srv/pxe copytoram=n cow_spacesize=75%
 SYSAPPEND 3
 
 LABEL ArchNFSCopy
 MENU LABEL Boot Arch Linux using NFS (Copy to RAM)
 LINUX arch/x86_64/vmlinuz-linux
 INITRD arch/intel-ucode.img,arch/amd-ucode.img,arch/x86_64/initramfs-linux-pxe.img
-APPEND pxe_nfs_srv=${pxeserver}:/srv/nfs copytoram=y cow_spacesize=75%
+APPEND pxe_nfs_srv=${pxeserver}:/srv/pxe copytoram=y cow_spacesize=75%
 SYSAPPEND 3
 
 LABEL ArchNBD
@@ -84,4 +84,18 @@ MENU LABEL Boot Arch Linux using iSCSI
 LINUX arch/x86_64/vmlinuz-linux
 INITRD arch/intel-ucode.img,arch/amd-ucode.img,arch/x86_64/initramfs-linux-pxe.img
 APPEND pxe_iscsi_srv=${pxeserver} copytoram=n cow_spacesize=75%
+SYSAPPEND 3
+
+LABEL ArchNVMeoF
+MENU LABEL Boot Arch Linux using NVMeoF
+LINUX arch/x86_64/vmlinuz-linux
+INITRD arch/intel-ucode.img,arch/amd-ucode.img,arch/x86_64/initramfs-linux-pxe.img
+APPEND pxe_nvmeof_srv=${pxeserver} copytoram=n cow_spacesize=75%
+SYSAPPEND 3
+
+LABEL ArchNVMeoFCopy
+MENU LABEL Boot Arch Linux using NVMeoF (Copy to RAM)
+LINUX arch/x86_64/vmlinuz-linux
+INITRD arch/intel-ucode.img,arch/amd-ucode.img,arch/x86_64/initramfs-linux-pxe.img
+APPEND pxe_nvmeof_srv=${pxeserver} copytoram=y cow_spacesize=75%
 SYSAPPEND 3

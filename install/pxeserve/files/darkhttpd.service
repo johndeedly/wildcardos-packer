@@ -10,8 +10,8 @@ StandardOutput=journal
 StandardError=journal
 Restart=on-failure
 RestartSec=2s
-WorkingDirectory=/srv/http
-ExecStart=/usr/bin/darkhttpd /srv/http --ipv6 --addr '::' --port 80 --mimetypes /etc/conf.d/mimetypes
+WorkingDirectory=/srv/pxe
+ExecStart=/usr/bin/darkhttpd /srv/pxe --ipv6 --addr '::' --port 80 --mimetypes /etc/conf.d/mimetypes
 
 [Install]
 WantedBy=default.target

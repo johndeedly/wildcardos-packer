@@ -86,25 +86,25 @@ cp ${SCRIPTDIR}/pxeserve/files/pxelinux.default /srv/tftp/efi64/pxelinux.cfg/def
 mkdir -p /srv/tftp/{,bios,efi32,efi64}/arch/x86_64
 
 log_text "Configure http"
-mkdir -p /srv/http/arch/x86_64
+mkdir -p /srv/pxe/arch/x86_64
 cp ${SCRIPTDIR}/pxeserve/files/darkhttpd.service /etc/systemd/system/
 
 log_text "Configure nfs"
-mkdir -p /srv/nfs/arch/x86_64
+mkdir -p /srv/pxe/arch/x86_64
 sed -i '0,/^\[mountd\].*/s//[mountd]\nport=20048/' /etc/nfs.conf
 cp ${SCRIPTDIR}/pxeserve/files/exports /etc/exports
 
 log_text "Configure nbd"
-mkdir -p /srv/nbd/arch/x86_64
+mkdir -p /srv/pxe/arch/x86_64
 cp ${SCRIPTDIR}/pxeserve/files/nbd.config /etc/nbd-server/config
 cp ${SCRIPTDIR}/pxeserve/files/nbd.allow /etc/nbd-server/allow
 
 log_text "Configure cifs"
-mkdir -p /srv/cifs/arch/x86_64
+mkdir -p /srv/pxe/arch/x86_64
 cp ${SCRIPTDIR}/pxeserve/files/smb.conf /etc/samba/smb.conf
 
 log_text "Prepare iscsi (targetcli only usable after first boot)"
-mkdir -p /etc/target /srv/iscsi/arch/x86_64
+mkdir -p /etc/target /srv/pxe/arch/x86_64
 cp ${SCRIPTDIR}/pxeserve/files/saveconfig.json /etc/target/saveconfig.json
 #
 # targetcli <<EOS
@@ -123,9 +123,9 @@ cp ${SCRIPTDIR}/pxeserve/files/saveconfig.json /etc/target/saveconfig.json
 #
 
 log_text "Change default access rights"
-chown -R root:root /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs
-find /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs -type d -exec chmod 755 {} \;
-find /srv/tftp /srv/http /srv/nfs /srv/nbd /srv/cifs -type f -exec chmod 644 {} \;
+chown -R root:root /srv/tftp /srv/pxe
+find /srv/tftp /srv/pxe -type d -exec chmod 755 {} \;
+find /srv/tftp /srv/pxe -type f -exec chmod 644 {} \;
 
 log_text "Enable all configured services"
 systemctl enable dnsmasq nfs-server nbd smb wireguard darkhttpd target

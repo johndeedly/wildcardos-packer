@@ -57,7 +57,7 @@
         "unmap_granularity_alignment": 0,
         "unmap_zeroes_data": 0
       },
-      "dev": "/srv/iscsi/arch/x86_64/pxeboot.img",
+      "dev": "/srv/pxe/arch/x86_64/pxeboot.img",
       "name": "arch",
       "plugin": "fileio",
       "write_back": false,
