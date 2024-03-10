@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 log_text "Install packages needed for pxe boot"
-pacman_whenneeded syslinux darkhttpd nfs-utils nbd samba dnsmasq targetcli-fb python-rtslib-fb python-configshell-fb
+pacman_whenneeded syslinux darkhttpd nfs-utils nbd samba dnsmasq targetcli-fb python-rtslib-fb python-configshell-fb nvmetcli
 
 log_text "Configure network"
 DHCP_ADDITIONAL_SETUP=(
@@ -122,13 +122,18 @@ cp ${SCRIPTDIR}/pxeserve/files/saveconfig.json /etc/target/saveconfig.json
 # EOS
 #
 
+log_text "Configure nvmeof"
+mkdir -p /etc/nvmet
+cp ${SCRIPTDIR}/pxeserve/files/config.json /etc/nvmet/config.json
+echo "nvmet" | tee /etc/modules-load.d/nvmet.conf
+
 log_text "Change default access rights"
 chown -R root:root /srv/tftp /srv/pxe
 find /srv/tftp /srv/pxe -type d -exec chmod 755 {} \;
 find /srv/tftp /srv/pxe -type f -exec chmod 644 {} \;
 
 log_text "Enable all configured services"
-systemctl enable dnsmasq nfs-server nbd smb wireguard darkhttpd target
+systemctl enable dnsmasq nfs-server nbd smb wireguard darkhttpd target nvmet
 
 log_text "Allow pxe protocols"
 ufw disable
@@ -150,6 +155,7 @@ ufw allow in on eth1 to any port nbd comment 'nbd on intern'
 ufw allow in on eth1 to any port 445 comment 'cifs on intern'
 ufw allow in on eth1 to any port 139 comment 'cifs on intern'
 ufw allow in on eth1 to any port 3260 comment 'iscsi on intern'
+ufw allow in on eth1 to any port 8009 comment 'nvmeof on intern'
 ufw allow in on eth1 to any port 8443 comment 'step-ca on intern'
 ufw allow in on eth1 to any port 51820 comment 'wireguard on intern'
 ufw route allow in on eth1 out on wg0 comment 'allow forward from intern to wireguard'
