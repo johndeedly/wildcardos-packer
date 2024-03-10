@@ -18,7 +18,7 @@ source "${SCRIPTDIR}/bootstrap/skeleton.sh"
 log_text "Prepare NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
 mkdir -p "${USERHOME}/.config" "${USERHOME}/.local/share"
-git clone 'https://github.com/NvChad/NvChad' "${USERHOME}/.config/nvim" --depth 1
+git clone --branch 'v3.0' 'https://github.com/NvChad/NvChad' "${USERHOME}/.config/nvim" --depth 1
 EOS
 cp -r ${SCRIPTDIR}/bootstrap/nvim-lua-custom "${USERHOME}/.config/nvim/lua/custom"
 chown -R "${USERID}:${USERGRP}" "${USERHOME}/.config/nvim/lua/custom"
