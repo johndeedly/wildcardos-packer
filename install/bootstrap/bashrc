@@ -209,16 +209,6 @@ function ip() {
 }
 export -f ip
 
-function trash() {
-    command rmtrash "$@"
-}
-export -f trash
-
-function trashdir() {
-    command rmtrash -r "$@"
-}
-export -f trashdir
-
 function newpasswd() {
     command xkcdpass -w /usr/share/dict/ogerman -n 4 -c 8 --min 4 --max 8 "$@"
 }
