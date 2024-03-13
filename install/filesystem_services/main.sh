@@ -16,8 +16,12 @@ snapper --no-dbus -c root create-config /
 snapper --no-dbus -c home create-config /home
 sed -i 's/^TIMELINE_LIMIT_MONTHLY.*/TIMELINE_LIMIT_MONTHLY="5"/' /etc/snapper/configs/root
 sed -i 's/^TIMELINE_LIMIT_YEARLY.*/TIMELINE_LIMIT_YEARLY="0"/' /etc/snapper/configs/root
+sed -i 's/^ALLOW_GROUPS.*/ALLOW_GROUPS="wheel"/' /etc/snapper/configs/root
+sed -i 's/^SYNC_ACL.*/SYNC_ACL="yes"/' /etc/snapper/configs/root
 sed -i 's/^TIMELINE_LIMIT_MONTHLY.*/TIMELINE_LIMIT_MONTHLY="5"/' /etc/snapper/configs/home
 sed -i 's/^TIMELINE_LIMIT_YEARLY.*/TIMELINE_LIMIT_YEARLY="0"/' /etc/snapper/configs/home
+sed -i 's/^ALLOW_GROUPS.*/ALLOW_GROUPS="wheel"/' /etc/snapper/configs/home
+sed -i 's/^SYNC_ACL.*/SYNC_ACL="yes"/' /etc/snapper/configs/home
 
 log_text "Enable snapper timeline and cleanup timers"
 systemctl enable snapper-timeline.timer snapper-cleanup.timer
