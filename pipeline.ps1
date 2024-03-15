@@ -13,6 +13,8 @@ Param(
     [switch]$DualBoot,
     [Parameter(Mandatory=$False)]
     [switch]$Encryption,
+    [Parameter(Mandatory=$False)]
+    [switch]$DisableHeadless,
     [Parameter(ParameterSetName='StageTarget')]
 	[Parameter(ParameterSetName='Mandatory')]
     [switch]$Bootstrap,
@@ -61,6 +63,10 @@ if ($DualBoot) {
 if ($Encryption) {
 	Write-Host ":: Encryption enabled"
 	$env:PKR_VAR_encryption = "true"
+}
+if ($DisableHeadless) {
+	Write-Host ":: Headless build disabled"
+	$env:PKR_VAR_headless = "false"
 }
 if ($Cinnamon) {
 	$Bootstrap=$True
