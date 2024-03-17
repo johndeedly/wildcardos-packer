@@ -42,3 +42,7 @@ auto-entries   no
 auto-firmware  yes
 console-mode   max
 EOF
+
+log_text "Throw the dice for the random seed"
+mount -o remount,rw ${MOUNTPOINT%%/}/boot
+arch-chroot ${MOUNTPOINT%%/} bootctl random-seed
