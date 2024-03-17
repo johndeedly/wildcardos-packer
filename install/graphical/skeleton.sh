@@ -64,6 +64,14 @@ cp ${SCRIPTDIR}/graphical/files/xarchiverrc "${USERHOME}"/.config/xarchiver/xarc
 chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/xarchiver/xarchiverrc
 cp ${SCRIPTDIR}/graphical/files/xarchiverrc "${ROOTHOME}"/.config/xarchiver/xarchiverrc
 
+log_text Create skeleton for flameshot
+mkdir -p /etc/skel/.config/flameshot "${ROOTHOME}"/.config/flameshot "${USERHOME}"/.config/flameshot
+chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/flameshot
+cp ${SCRIPTDIR}/graphical/files/flameshot.ini /etc/skel/.config/flameshot/flameshot.ini
+cp ${SCRIPTDIR}/graphical/files/flameshot.ini "${USERHOME}"/.config/flameshot/flameshot.ini
+chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/flameshot/flameshot.ini
+cp ${SCRIPTDIR}/graphical/files/flameshot.ini "${ROOTHOME}"/.config/flameshot/flameshot.ini
+
 log_text Create skeleton for Xdefaults
 cp ${SCRIPTDIR}/graphical/files/Xdefaults /etc/skel/.Xdefaults
 cp ${SCRIPTDIR}/graphical/files/Xdefaults "${USERHOME}"/.Xdefaults
