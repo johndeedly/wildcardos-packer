@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 log_text "Packages needed to build placeholders"
-pacman_whenneeded fakeroot binutils
+pacman_whenneeded fakeroot binutils debugedit
 
 log_text "Create sudo-dummy build environment"
 mkdir -p "${TEMPHOME}"/sudo-dummy
