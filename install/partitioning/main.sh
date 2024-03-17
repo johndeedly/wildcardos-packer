@@ -21,7 +21,8 @@ genfstab -U -p ${MOUNTPOINT%%/} > ${MOUNTPOINT%%/}/etc/fstab
 if [[ ${TAGS[@]} =~ "encryption" ]]; then
     log_text "Generate crypttab"
     LUKSUUID=$(cryptsetup luksUUID ${PART_DATA})
-    tee ${MOUNTPOINT%%/}/etc/crypttab{,.initramfs} <<EOF >/dev/null
+    touch ${MOUNTPOINT%%/}/etc/crypttab
+    tee ${MOUNTPOINT%%/}/etc/crypttab.initramfs <<EOF >/dev/null
 data  /dev/disk/by-uuid/${LUKSUUID}  /luks.key:LABEL=EFI  luks
 EOF
 fi
