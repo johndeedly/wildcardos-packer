@@ -77,6 +77,7 @@ PACKAGE_LIST=(
     gpicview
     qalculate-gtk
     drawio-desktop
+    code
     # easy package management
     pamac-nosnap
     flatpak
@@ -100,3 +101,30 @@ flatpak install --system --assumeyes --noninteractive --or-update flathub org.mo
 
 log_text "Install chromium flatpak"
 flatpak install --system --assumeyes --noninteractive --or-update flathub org.chromium.Chromium
+
+log_text "Install code-oss extensions for user"
+su -s /bin/bash -l $USERID <<EOS
+# csharp
+code --install-extension muhammad-sammy.csharp --force
+# xml
+code --install-extension dotjoshjohnson.xml --force
+# better comments
+code --install-extension aaron-bond.better-comments --force
+# git graph
+code --install-extension mhutchie.git-graph --force
+# git blame
+code --install-extension waderyan.gitblame --force
+# yara
+code --install-extension infosec-intern.yara --force
+# hex editor
+code --install-extension ms-vscode.hexeditor --force
+# german language pack
+code --install-extension ms-ceintl.vscode-language-pack-de --force
+# color code highlighter
+code --install-extension naumovs.color-highlight --force
+# reset application defaults
+#   Code claims to be a file manager 😓 -> inode/directory removed from list
+[ -f /usr/share/applications/code-oss.desktop ] && \
+  xdg-mime default code-oss.desktop `grep 'MimeType=' /usr/share/applications/code-oss.desktop | sed -e 's/.*=//' -e 's/;/ /g' -e 's/inode\/directory//g'`
+xdg-mime default code-oss.desktop 'text/plain' 'text/html' 'text/x-shellscript' 'application/json' 'text/xml' 'text/x-php' 'text/x-c' 'text/x-c++'
+EOS
