@@ -27,6 +27,18 @@ Categories=System;Utility;
 EOF
 chmod a+x /etc/xdg/autostart/ibus-daemon.desktop
 
+su - "${USERID}" <<EOS
+XDG_CONFIG_HOME="${USERHOME}"/.config dconf dump /desktop/ibus/ > "${USERHOME}"/dconf-dump.ini
+tee -a "${USERHOME}"/dconf-dump.ini <<EOX
+
+[general]
+preload-engines=['xkb:de::deu']
+use-system-keyboard-layout=true
+EOX
+dbus-run-session -- bash -c 'XDG_CONFIG_HOME="${USERHOME}"/.config dconf load /desktop/ibus/ < "${USERHOME}"/dconf-dump.ini'
+/usr/bin/rm "${USERHOME}"/dconf-dump.ini
+EOS
+
 if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
     log_text "Enable software cursor in virtual environments"
     cp ${SCRIPTDIR}/graphical/files/05-swcursor.conf /etc/X11/xorg.conf.d/
