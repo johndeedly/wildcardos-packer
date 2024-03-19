@@ -76,7 +76,7 @@ command='ibus emoji'
 name='emoji picker'
 
 [desktop/keybindings/custom-keybindings/custom5]
-binding=['<Super>#']
+binding=['<Super>numbersign']
 command='qalculate-gtk'
 name='calculator'
 
