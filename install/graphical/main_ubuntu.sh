@@ -41,6 +41,8 @@ PACKAGE_LIST=(
     fonts-dejavu
     # complementary programs
     # firefox and chromium are flatpaks now
+    cups
+    ipp-usb
     libreoffice
     libreoffice-l10n-de
     krita
@@ -67,6 +69,9 @@ PACKAGE_LIST=(
 
 log_text "Install and configure base packages needed for graphical environments"
 pacman_whenneeded ${PACKAGE_LIST[@]}
+
+log_text "Enable cups printer service"
+systemctl enable cups
 
 log_text "Disable and mask light display manager, thanks ubuntu"
 systemctl disable lightdm

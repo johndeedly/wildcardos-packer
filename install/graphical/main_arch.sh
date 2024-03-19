@@ -54,6 +54,8 @@ PACKAGE_LIST=(
     ttf-ms-fonts
     # complementary programs
     # firefox and chromium are flatpaks now
+    cups
+    ipp-usb
     libreoffice-fresh
     libreoffice-fresh-de
     krita
@@ -82,6 +84,9 @@ PACKAGE_LIST=(
 
 log_text "Install and configure base packages needed for graphical environments"
 pacman_whenneeded ${PACKAGE_LIST[@]}
+
+log_text "Enable cups printer service"
+systemctl enable cups
 
 # https://bbs.archlinux.org/viewtopic.php?id=289146
 log_text "Add user to realtime group"
