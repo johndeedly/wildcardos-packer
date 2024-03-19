@@ -67,7 +67,7 @@ name='lf'
 
 [desktop/keybindings/custom-keybindings/custom3]
 binding=['<Alt>w']
-command='chromium'
+command='flatpak run org.chromium.Chromium'
 name='chromium'
 
 [desktop/keybindings/custom-keybindings/custom4]
