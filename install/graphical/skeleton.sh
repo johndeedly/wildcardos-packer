@@ -72,6 +72,15 @@ cp ${SCRIPTDIR}/graphical/files/flameshot.ini "${USERHOME}"/.config/flameshot/fl
 chown "${USERID}:${USERGRP}" "${USERHOME}"/.config/flameshot/flameshot.ini
 cp ${SCRIPTDIR}/graphical/files/flameshot.ini "${ROOTHOME}"/.config/flameshot/flameshot.ini
 
+log_text Create skeleton for code
+mkdir -p "/etc/skel/.config/Code - OSS/User" "${ROOTHOME}/.config/Code - OSS/User" "${USERHOME}/.config/Code - OSS/User"
+chown "${USERID}:${USERGRP}" "${USERHOME}/.config/Code - OSS"
+chown "${USERID}:${USERGRP}" "${USERHOME}/.config/Code - OSS/User"
+cp ${SCRIPTDIR}/graphical/files/settings.json "/etc/skel/.config/Code - OSS/User/settings.json"
+cp ${SCRIPTDIR}/graphical/files/settings.json "${USERHOME}/.config/Code - OSS/User/settings.json"
+chown "${USERID}:${USERGRP}" "${USERHOME}/.config/Code - OSS/User/settings.json"
+cp ${SCRIPTDIR}/graphical/files/settings.json "${ROOTHOME}/.config/Code - OSS/User/settings.json"
+
 log_text Create skeleton for Xdefaults
 cp ${SCRIPTDIR}/graphical/files/Xdefaults /etc/skel/.Xdefaults
 cp ${SCRIPTDIR}/graphical/files/Xdefaults "${USERHOME}"/.Xdefaults
