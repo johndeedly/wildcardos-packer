@@ -44,7 +44,7 @@ exec='kitty'
 exec-arg='--'
 
 [desktop/keybindings]
-custom-list=['__dummy__', 'custom0', 'custom1', 'custom2', 'custom3', 'custom4', 'custom5']
+custom-list=['__dummy__', 'custom0', 'custom1', 'custom2', 'custom3', 'custom4']
 looking-glass-keybinding=@as []
 pointer-next-monitor=@as []
 pointer-previous-monitor=@as []
@@ -75,13 +75,8 @@ binding=['<Control><Shift>e']
 command='ibus emoji'
 name='emoji picker'
 
-[desktop/keybindings/custom-keybindings/custom3]
-binding=['<Alt>period']
-command='qalculate-gtk'
-name='calculator'
-
 [desktop/keybindings/media-keys]
-calculator=@as []
+calculator=['<Alt>period']
 email=@as []
 home=['<Alt>e']
 screensaver=['<Alt>l', 'XF86ScreenSaver']
