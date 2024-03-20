@@ -76,7 +76,7 @@ command='ibus emoji'
 name='emoji picker'
 
 [desktop/keybindings/custom-keybindings/custom3]
-binding=['<Alt>numbersign']
+binding=['<Alt>period']
 command='qalculate-gtk'
 name='calculator'
 
