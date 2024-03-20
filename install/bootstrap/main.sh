@@ -26,13 +26,15 @@ log_text "Setup NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
 nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":Lazy sync | Lazy load all" -c ":MasonInstallAll" -c ":TSInstall all" -c ":qall!" || true
 EOS
+log_text "Wait for NvChad to finish"
+sleep 5
 log_text "Mirror NvChad environment"
 mkdir -p /etc/skel/.config/nvim /etc/skel/.local/share/nvim \
   "${ROOTHOME}/.config/nvim" "${ROOTHOME}/.local/share/nvim"
-cp -r "${USERHOME}/.config/nvim/"* /etc/skel/.config/nvim/
-cp -r "${USERHOME}/.local/share/nvim/"* /etc/skel/.local/share/nvim/
-cp -r "${USERHOME}/.config/nvim/"* "${ROOTHOME}/.config/nvim/"
-cp -r "${USERHOME}/.local/share/nvim/"* "${ROOTHOME}/.local/share/nvim"
+cp -rd "${USERHOME}/.config/nvim/"* /etc/skel/.config/nvim/ || log_error "Error copying config to skeleton"
+cp -rd "${USERHOME}/.local/share/nvim/"* /etc/skel/.local/share/nvim/ || log_error "Error copying local share to skeleton"
+cp -rd "${USERHOME}/.config/nvim/"* "${ROOTHOME}/.config/nvim/" || log_error "Error copying config to root"
+cp -rd "${USERHOME}/.local/share/nvim/"* "${ROOTHOME}/.local/share/nvim/" || log_error "Error copying local share to root"
 
 log_text "Enable ntfs kernel support (since 5.15)"
 echo "ntfs3" | tee /etc/modules-load.d/ntfs3.conf
