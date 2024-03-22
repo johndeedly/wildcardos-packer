@@ -143,6 +143,9 @@ unmaximize=@as []
 
 [settings-daemon/plugins/power]
 button-power='shutdown'
+
+[muffin]
+placement-mode='center'
 EOX
 dbus-run-session -- bash -c 'XDG_CONFIG_HOME="${USERHOME}"/.config dconf load /org/cinnamon/ < "${USERHOME}"/dconf-dump.ini'
 /usr/bin/rm "${USERHOME}"/dconf-dump.ini
