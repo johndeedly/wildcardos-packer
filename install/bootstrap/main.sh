@@ -16,12 +16,10 @@ log_text "Create user skeleton"
 source "${SCRIPTDIR}/bootstrap/skeleton.sh"
 
 log_text "Prepare NvChad environment"
-su -s /bin/bash - "${USERID}" <<EOS
-mkdir -p "${USERHOME}/.config" "${USERHOME}/.local/share"
-git clone --branch 'v2.0' 'https://github.com/NvChad/NvChad' "${USERHOME}/.config/nvim" --depth 1
-EOS
-cp -r ${SCRIPTDIR}/bootstrap/nvim-lua-custom "${USERHOME}/.config/nvim/lua/custom"
-chown -R "${USERID}:${USERGRP}" "${USERHOME}/.config/nvim/lua/custom"
+mkdir -p "${USERHOME}/.config/nvim" "${USERHOME}/.local/share"
+chown "${USERID}:${USERGRP}" "${USERHOME}/.config" "${USERHOME}/.config/nvim" "${USERHOME}/.local" "${USERHOME}/.local/share"
+cp -r ${SCRIPTDIR}/bootstrap/nvchad-starter/* "${USERHOME}/.config/nvim/"
+chown -R "${USERID}:${USERGRP}" "${USERHOME}/.config/nvim/"
 log_text "Setup NvChad environment"
 su -s /bin/bash - "${USERID}" <<EOS
 nvim -es -u "${USERHOME}/.config/nvim/init.lua" -c ":Lazy sync | Lazy load all" -c ":MasonInstallAll" -c ":TSInstall all" -c ":qall!" || true
