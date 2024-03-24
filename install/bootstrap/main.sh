@@ -34,14 +34,17 @@ cp -rd "${USERHOME}/.local/share/nvim/"* /etc/skel/.local/share/nvim/ || log_err
 cp -rd "${USERHOME}/.config/nvim/"* "${ROOTHOME}/.config/nvim/" || log_error "Error copying config to root"
 cp -rd "${USERHOME}/.local/share/nvim/"* "${ROOTHOME}/.local/share/nvim/" || log_error "Error copying local share to root"
 
-log_text "Enable ntfs kernel support (since 5.15)"
+log_text "Enable ntfs3 kernel support for read/write/repair of partitions"
 echo "ntfs3" | tee /etc/modules-load.d/ntfs3.conf
 tee /etc/udev/rules.d/50-ntfs.rules <<EOF
 SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
 EOF
 
-log_text "Enable cifs kernel support"
+log_text "Enable cifs kernel support for windows shares"
 echo "cifs" | tee /etc/modules-load.d/cifs.conf
+
+log_text "Enable sg kernel support for dvd/bluray drives"
+echo "sg" | tee /etc/modules-load.d/sg.conf
 
 log_text "Configure ufw"
 # configure ufw
