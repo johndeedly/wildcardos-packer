@@ -169,7 +169,7 @@ function Packer-BuildAppliance {
 			return $process.ExitCode
 		} else {
 			$env:PKR_VAR_sound_driver = "pulse"
-			$env:PKR_VAR_accel_graphics = "on"
+			$env:PKR_VAR_accel_graphics = "off"
 			$process = Start-Process -PassThru -Wait -FilePath "packer" -ArgumentList $ArgList
 			return $process.ExitCode
 		}
