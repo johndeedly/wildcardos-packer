@@ -2,6 +2,8 @@
 [CmdletBinding(DefaultParameterSetName='Fail')]
 Param(
     [Parameter(Mandatory=$False)]
+    [switch]$ForceVirtualbox,
+    [Parameter(Mandatory=$False)]
     [switch]$PxeBoot,
     [Parameter(Mandatory=$False)]
     [switch]$PxeServe,
@@ -177,7 +179,7 @@ function Packer-BuildAppliance {
 
 New-Item -Path $PWD.ProviderPath -Name "output" -ItemType "directory" -Force | Out-Null
 $env:PACKER_LOG=1
-if ($IsWindows -or $env:OS) {
+if ($IsWindows -or $env:OS -or $ForceVirtualbox) {
   # VBOX
   $env:PACKER_LOG_PATH="output/wildcardos-packerlog.txt"
   if ((Packer-BuildAppliance -SearchFileName "*wildcardos*$($env:PKR_VAR_build_arch)-$($env:PKR_VAR_stage)-$($env:PKR_VAR_yearmonthday)*.ovf" -ArgList "build -force -on-error=ask -only=virtualbox-iso.default packer/wildcardos.pkr.hcl") -ne 0) {
