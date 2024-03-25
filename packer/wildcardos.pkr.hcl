@@ -164,7 +164,7 @@ source "virtualbox-iso" "default" {
   cd_label                 = "CIDATA"
   disk_size                = 524288
   memory                   = var.memory
-  format                   = "ovf"
+  format                   = "ova"
   guest_additions_mode     = "disable"
   guest_os_type            = "ArchLinux_64"
   hard_drive_discard       = true

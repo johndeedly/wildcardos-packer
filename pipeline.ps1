@@ -182,7 +182,7 @@ $env:PACKER_LOG=1
 if ($IsWindows -or $env:OS -or $ForceVirtualbox) {
   # VBOX
   $env:PACKER_LOG_PATH="output/wildcardos-packerlog.txt"
-  if ((Packer-BuildAppliance -SearchFileName "*wildcardos*$($env:PKR_VAR_build_arch)-$($env:PKR_VAR_stage)-$($env:PKR_VAR_yearmonthday)*.ovf" -ArgList "build -force -on-error=ask -only=virtualbox-iso.default packer/wildcardos.pkr.hcl") -ne 0) {
+  if ((Packer-BuildAppliance -SearchFileName "*wildcardos*$($env:PKR_VAR_build_arch)-$($env:PKR_VAR_stage)-$($env:PKR_VAR_yearmonthday)*.ova" -ArgList "build -force -on-error=ask -only=virtualbox-iso.default packer/wildcardos.pkr.hcl") -ne 0) {
   	break
   }
 } else {
