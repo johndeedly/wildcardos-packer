@@ -51,7 +51,7 @@ pointer-previous-monitor=@as []
 show-desklets=@as []
 
 [desktop/keybindings/custom-keybindings/custom0]
-binding=['<Shift><Super>Return']
+binding=['<Shift><Super>Return', '<Shift><Super>KP_Enter']
 command='wofi --fork --normal-window --insensitive --allow-images --allow-markup --show drun'
 name='wofi'
 
@@ -81,7 +81,7 @@ email=@as []
 home=['<Super>e']
 screensaver=['<Super>l', 'XF86ScreenSaver']
 search=@as []
-terminal=['<Super>Return']
+terminal=['<Super>Return', '<Super>KP_Enter']
 www=['<Super>w']
 
 [desktop/keybindings/wm]
@@ -146,6 +146,9 @@ button-power='shutdown'
 
 [muffin]
 placement-mode='center'
+
+[desktop/wm/preferences]
+mouse-button-modifier='<Super>'
 EOX
 dbus-run-session -- bash -c 'XDG_CONFIG_HOME="${USERHOME}"/.config dconf load /org/cinnamon/ < "${USERHOME}"/dconf-dump.ini'
 /usr/bin/rm "${USERHOME}"/dconf-dump.ini
