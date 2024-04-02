@@ -48,6 +48,11 @@ ${ROOTID}:100000:65536
 ${USERID}:165536:65536
 EOF
 
+if [ -n $INSTALLED_HARDWARE_VIRTUALBOX ]; then
+  log_text "Add user to the vboxsf group"
+  usermod -aG vboxsf "${USERID}"
+fi
+
 if [ -n "$VERBOSE" ]; then
   echo -en "root user:  ${ROOTID}|${ROOTGRP}|${ROOTHOME}\n"
   echo -en "daily user: ${USERID}|${USERGRP}|${USERHOME}\n"

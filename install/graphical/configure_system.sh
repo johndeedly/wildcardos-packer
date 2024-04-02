@@ -39,8 +39,8 @@ dbus-run-session -- bash -c 'XDG_CONFIG_HOME="${USERHOME}"/.config dconf load /d
 /usr/bin/rm "${USERHOME}"/dconf-dump.ini
 EOS
 
-if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
-    log_text "Enable software cursor in virtual environments"
+if [ -n $INSTALLED_HARDWARE_VIRTUALBOX ]; then
+    log_text "Enable software cursor in virtualbox environments"
     cp ${SCRIPTDIR}/graphical/files/05-swcursor.conf /etc/X11/xorg.conf.d/
 fi
 

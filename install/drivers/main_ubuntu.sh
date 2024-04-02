@@ -23,7 +23,7 @@ if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
     sed -i 's/^#\?AutoEnable=.*/AutoEnable=true/' /etc/bluetooth/main.conf
 fi
 
-if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
-    log_text "Configure virtual machine drivers"
+if [ -n $INSTALLED_HARDWARE_VIRTUALBOX ]; then
+    log_text "Configure virtualbox drivers"
     systemctl enable virtualbox-guest-utils
 fi

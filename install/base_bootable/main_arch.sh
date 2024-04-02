@@ -32,8 +32,11 @@ fi
 if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
     PACKAGE_LIST+=( bluez bluez-utils bluez-plugins )
 fi
-if [ -n $INSTALLED_HARDWARE_VIRTUAL_MACHINE ]; then
-    PACKAGE_LIST+=( virtualbox-guest-utils qemu-guest-agent )
+if [ -n $INSTALLED_HARDWARE_VIRTUALBOX ]; then
+    PACKAGE_LIST+=( virtualbox-guest-utils )
+fi
+if [ -n $INSTALLED_HARDWARE_QEMU ]; then
+    PACKAGE_LIST+=( qemu-guest-agent )
 fi
 
 log_text "Create a basic system inside the mountpoint folder"
