@@ -41,13 +41,6 @@ ARCHISOMODDED="archlinux-${ARCHISODATE}-x86_64-with-cidata-and-install-scripts.i
 [ -f output/cloud-init.img ] && rm output/cloud-init.img
 [ -f "output/${ARCHISOMODDED}" ] && rm "output/${ARCHISOMODDED}"
 
-ARCHISODATESLASH=${ARCHISODATE//./\/}
-log_text "Change the server string in CIDATA/user-data to have '${ARCHISODATESLASH}' in it"
-if ! sed -i "s/Server=.*/Server=https:\/\/archive.archlinux.org\/repos\/${ARCHISODATESLASH//\//\\\/}\/\$repo\/os\/\$arch/" CIDATA/user-data; then
-    log_error "Could not modify CIDATA/user-data"
-    exit 1
-fi
-
 log_text "Create CIDATA image to append it to the archiso image"
 mkfs.fat -C -n CIDATA output/cloud-init.img 2048
 mcopy -i output/cloud-init.img CIDATA/meta-data CIDATA/user-data CIDATA/network-config ::

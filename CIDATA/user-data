@@ -19,18 +19,14 @@ prefer_fqdn_over_hostname: true
 ### first command to execute in cloud-init execution order
 bootcmd:
   # stop and disable reflector to be able to change the pacman mirrorlist
-  - [ systemctl, stop, reflector.service, reflector.timer ]
-  - [ systemctl, disable, reflector.service, reflector.timer ]
+  - systemctl stop reflector.service reflector.timer
+  - systemctl disable reflector.service reflector.timer
+  # time travel the repositories back to the build day of the iso
+  # the path year/month/day is resolved through the file "/version" in the archiso ram fs
+  - echo "Server=https://archive.archlinux.org/repos/$(head -1 /version | sed -e 's|\.|/|g')/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 ### second command to execute in cloud-init execution order
 write_files:
-  # time travel the repositories back to the build day of the iso
-  # the path year/month/day is resolved and modified through pipeline.ps1
-  - path: /etc/pacman.d/mirrorlist
-    content: |
-      Server=https://archive.archlinux.org/repos/2024/03/01/$repo/os/$arch
-    owner: 'root:root'
-    permissions: '0644'
   # enable german keyboard
   - path: /etc/vconsole.conf
     content: |
@@ -43,4 +39,4 @@ write_files:
 ### third command to execute in cloud-init execution order
 runcmd:
   # load the german keyboard layout for the current session
-  - [ loadkeys, de-latin1 ]
+  - loadkeys de-latin1
