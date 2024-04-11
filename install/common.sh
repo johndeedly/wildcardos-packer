@@ -24,11 +24,11 @@ function archiso_pacman_whenneeded() {
 if [[ ${TAGS[@]} =~ "archlinux" ]]; then
     function pacman_whenneeded() {
         log_text "Install package(s) ${*// /,}"
-        yes | LC_ALL=C /usr/bin/pacman -Sy --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C /usr/bin/pacman -Sy --disable-download-timeout --noconfirm --needed --noprogressbar --color=auto $*
     }
     function pacman_package_whenneeded() {
         log_text "Install package(s) ${*// /,}"
-        yes | LC_ALL=C /usr/bin/pacman -U --noconfirm --needed --noprogressbar --color=auto $*
+        yes | LC_ALL=C /usr/bin/pacman -U --disable-download-timeout --noconfirm --needed --noprogressbar --color=auto $*
     }
 elif [[ ${TAGS[@]} =~ "ubuntu" ]]; then
     function pacman_whenneeded() {
