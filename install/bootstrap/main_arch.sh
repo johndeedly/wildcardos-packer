@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+log_text "Install basic packages to create a system with filesystem drivers"
+pacman_whenneeded doas linux linux-headers linux-firmware \
+    efibootmgr dosfstools mtools \
+    lvm2 btrfs-progs syslog-ng
+
 log_text "Install standard packages"
 pacman_whenneeded nano npm neovim htop btop dialog git ufw \
   bash-completion pacman-contrib openssh pv lshw libxml2 jq ly polkit \

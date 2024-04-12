@@ -1,59 +1,7 @@
 #!/usr/bin/env bash
 
 log_text "Prepare debootstrap and eatmydata"
-archiso_pacman_whenneeded debootstrap libeatmydata
-
-log_text "List of basic packages to create a system with filesystem drivers"
-PACKAGE_LIST=(
-    # always needed, always present
-    ubuntu-minimal
-    doas
-    eatmydata
-    curl
-    wget
-    zstd
-    # package for add-apt-repository command
-    software-properties-common
-    # systemd base
-    dbus-broker
-    systemd
-    systemd-homed
-    systemd-boot
-    # linux kernel and headers
-    linux-generic
-    linux-image-generic
-    linux-headers-generic
-    # firmwares to support more hardware
-    linux-firmware
-    # efi system per default
-    efibootmgr
-    # efi partition, btrfs system, lvm2 data and swap
-    dosfstools
-    lvm2
-    btrfs-progs
-    # initramfs and cryptfs
-    initramfs-tools
-    cryptsetup
-    cryptsetup-initramfs
-)
-if [ -n "$INSTALLED_HARDWARE_CPU_AMD" ]; then
-    PACKAGE_LIST+=( amd64-microcode )
-fi
-if [ -n "$INSTALLED_HARDWARE_CPU_INTEL" ]; then
-    PACKAGE_LIST+=( intel-microcode )
-fi
-if [ -n $INSTALLED_HARDWARE_WIRELESS ]; then
-    PACKAGE_LIST+=( iwd iw )
-fi
-if [ -n $INSTALLED_HARDWARE_BLUETOOTH ]; then
-    PACKAGE_LIST+=( bluez bluez-tools )
-fi
-if [ -n $INSTALLED_HARDWARE_VIRTUALBOX ]; then
-    PACKAGE_LIST+=( virtualbox-guest-x11 )
-fi
-if [ -n $INSTALLED_HARDWARE_QEMU ]; then
-    PACKAGE_LIST+=( qemu-guest-agent )
-fi
+archiso_pacman_whenneeded debootstrap ubuntu-keyring libeatmydata
 
 log_text "Configure kernel image creation without symlinks in boot"
 mkdir -p ${MOUNTPOINT%%/}/etc
@@ -79,10 +27,9 @@ export PATH="\$PATH:/usr/local/sbin:/usr/sbin"
 EOF
 
 log_text "Make sure the resuming device after cryptsetup is the rootfs uuid"
-ROOTUUID=$(blkid ${PART_ROOT} -s UUID -o value)
 mkdir -p ${MOUNTPOINT%%/}/etc/initramfs-tools/conf.d
 tee ${MOUNTPOINT%%/}/etc/initramfs-tools/conf.d/resume <<EOF
-RESUME=UUID=${ROOTUUID}
+RESUME=PARTLABEL=root
 EOF
 
 log_text "Install base system into mountpoint folder"
@@ -90,5 +37,5 @@ if [ ! -e /usr/share/debootstrap/scripts/${UBUNTU_RELEASE} ]; then
     # all newer releases softlink to gutsy, so we try the same
     ln -s gutsy /usr/share/debootstrap/scripts/${UBUNTU_RELEASE}
 fi
-eatmydata debootstrap --include=$(echo -en "${PACKAGE_LIST[@]}" | tr ' ' ',') --components=main,universe,multiverse ${UBUNTU_RELEASE} ${MOUNTPOINT%%/} https://ftp.halifax.rwth-aachen.de/ubuntu
+eatmydata debootstrap --include=eatmydata,dbus-broker,systemd --components=main,universe,multiverse ${UBUNTU_RELEASE} ${MOUNTPOINT%%/} https://ftp.halifax.rwth-aachen.de/ubuntu
 sync

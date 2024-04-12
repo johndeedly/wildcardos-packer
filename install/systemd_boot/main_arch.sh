@@ -13,8 +13,7 @@ log_text "Install systemd-boot"
 arch-chroot ${MOUNTPOINT%%/} bootctl --esp-path=/boot install
 
 log_text "Configure facts"
-ROOTUUID=$(blkid ${PART_ROOT} -s UUID -o value)
-BOOTOPTIONS="options root=UUID=${ROOTUUID} rootflags=subvol=@ rw loglevel=3 acpi=force acpi_osi=Linux"
+BOOTOPTIONS="options root=PARTLABEL=root rootflags=subvol=@ rw loglevel=3 acpi=force acpi_osi=Linux"
 AMDINITRDOPTS=""
 if [ -n "$INSTALLED_HARDWARE_CPU_AMD" ]; then
     AMDINITRDOPTS="initrd  /amd-ucode.img"
@@ -24,8 +23,11 @@ if [ -n "$INSTALLED_HARDWARE_CPU_INTEL" ]; then
     INTELINITRDOPTS="initrd  /intel-ucode.img"
 fi
 
-log_text "Default kernel boot option"
+log_text "Remove buildin kernel loader configs"
 mkdir -p ${MOUNTPOINT%%/}/boot/loader/entries
+rm -f ${MOUNTPOINT%%/}/boot/loader/entries/* || true
+
+log_text "Default kernel boot option"
 tee ${MOUNTPOINT%%/}/boot/loader/entries/80_arch.conf <<EOF
 title   Arch Linux
 linux   /vmlinuz-linux

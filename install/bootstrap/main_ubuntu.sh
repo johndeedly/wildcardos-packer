@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+log_text "Install basic packages to create a system with filesystem drivers"
+pacman_whenneeded doas curl wget zstd \
+    software-properties-common \
+    systemd-homed systemd-boot \
+    linux-generic linux-image-generic linux-headers-generic linux-firmware \
+    efibootmgr dosfstools lvm2 btrfs-progs \
+    initramfs-tools
+
 log_text "Add package source for dotnet"
 REPO_VERSION=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
 wget "https://packages.microsoft.com/config/ubuntu/$REPO_VERSION/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
