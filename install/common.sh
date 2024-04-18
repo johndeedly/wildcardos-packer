@@ -33,11 +33,11 @@ if [[ ${TAGS[@]} =~ "archlinux" ]]; then
 elif [[ ${TAGS[@]} =~ "ubuntu" ]]; then
     function pacman_whenneeded() {
         log_text "Install package(s) ${*// /,}"
-        LC_ALL=C yes | LC_ALL=C DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
+        LC_ALL=C yes | LC_ALL=C DEBIAN_FRONTEND="noninteractive" eatmydata apt install $*
     }
     function pacman_package_whenneeded() {
         log_text "Install package(s) ${*// /,}"
-        LC_ALL=C yes | LC_ALL=C DEBIAN_FRONTEND="noninteractive" eatmydata apt -y install $*
+        LC_ALL=C yes | LC_ALL=C DEBIAN_FRONTEND="noninteractive" eatmydata apt install $*
     }
 elif [[ ${TAGS[@]} =~ "rockylinux" ]]; then
     function pacman_whenneeded() {
