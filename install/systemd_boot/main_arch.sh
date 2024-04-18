@@ -3,9 +3,9 @@
 log_text "Create boot image and loader"
 if [[ ${TAGS[@]} =~ "encryption" ]]; then
     sed -i "s/^MODULES=(.*/MODULES=(vfat)/g" ${MOUNTPOINT%%/}/etc/mkinitcpio.conf
-    sed -i "s/^HOOKS=(.*/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block lvm2 sd-encrypt filesystems fsck)/g" ${MOUNTPOINT%%/}/etc/mkinitcpio.conf
+    sed -i "s/^HOOKS=(.*/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf kms block lvm2 sd-encrypt filesystems fsck)/g" ${MOUNTPOINT%%/}/etc/mkinitcpio.conf
 else
-    sed -i "s/^HOOKS=(.*/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block lvm2 filesystems fsck)/g" ${MOUNTPOINT%%/}/etc/mkinitcpio.conf
+    sed -i "s/^HOOKS=(.*/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf kms block lvm2 filesystems fsck)/g" ${MOUNTPOINT%%/}/etc/mkinitcpio.conf
 fi
 arch-chroot ${MOUNTPOINT%%/} mkinitcpio -P
 
