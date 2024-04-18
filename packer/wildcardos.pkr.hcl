@@ -221,6 +221,7 @@ mkdir -p "/tmp/swtpm.0" "share"
   -name wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64 \\
   -machine type=q35,accel=kvm \\
   -vga virtio \\
+  -display gtk,gl=on \\
   -cpu host \\
   -drive file=wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2,if=virtio,cache=writeback,discard=unmap,detect-zeroes=unmap,format=qcow2 \\
   -device tpm-tis,tpmdev=tpm0 -tpmdev emulator,id=tpm0,chardev=vtpm -chardev socket,id=vtpm,path=/tmp/swtpm.0/vtpm.sock \\
@@ -245,6 +246,7 @@ mkdir -p "/tmp/swtpm.1" "share"
   -name wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64 \\
   -machine type=q35,accel=kvm \\
   -vga virtio \\
+  -display gtk,gl=on \\
   -cpu host \\
   -device tpm-tis,tpmdev=tpm0 -tpmdev emulator,id=tpm0,chardev=vtpm -chardev socket,id=vtpm,path=/tmp/swtpm.1/vtpm.sock \\
   -drive file=/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd,if=pflash,unit=0,format=raw,readonly=on \\
