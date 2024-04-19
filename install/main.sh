@@ -8,7 +8,8 @@ err_report() {
 }
 trap 'err_report "${BASH_COMMAND}" "${?}"' ERR
 
-# parse parameters
+# parse parametersy
+BUILDAH=""
 DEVICE=""
 MOUNTPOINT=""
 SCRIPTDIR=$(realpath $(dirname $0))
@@ -18,6 +19,11 @@ POSITIONAL=()
 while [ $# -gt 0 ]; do
     key="$1"
     case $key in
+        -b|--buildah-device)
+            BUILDAH="$2"
+            shift
+            shift
+            ;;
         -d|--device)
             DEVICE="$2"
             shift
@@ -59,6 +65,7 @@ if [ -z "${MOUNTPOINT}" ]; then
   echo "-m|--mountpoint parameter is missing" 1>&2
   exit 1
 fi
+echo "using BUILDAH=${BUILDAH}"
 echo "using DEVICE=${DEVICE}"
 echo "using SCRIPTDIR=${SCRIPTDIR}"
 echo "using VERBOSE=${VERBOSE}"
@@ -185,4 +192,9 @@ fi
 if [[ ${TAGS[@]} =~ "pxeimage" ]]; then
     log_text "Requested building of squashfs image"
     source "${SCRIPTDIR}/pxeimage/main.sh"
+fi
+
+if [[ ${TAGS[@]} =~ "buildahimage" ]]; then
+    log_text "Requested building a podman image"
+    source "${SCRIPTDIR}/buildahimage/main.sh"
 fi

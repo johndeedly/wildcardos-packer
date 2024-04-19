@@ -10,6 +10,8 @@ Param(
     [Parameter(Mandatory=$False)]
     [switch]$PxeImage,
     [Parameter(Mandatory=$False)]
+    [switch]$BuildahImage,
+    [Parameter(Mandatory=$False)]
     [switch]$VerboseOutput,
     [Parameter(Mandatory=$False)]
     [switch]$DualBoot,
@@ -102,6 +104,14 @@ if ($PxeImage) {
 		$env:PKR_VAR_pxeimage = "true"
 	} else {
 		Write-Host ":: Pxe image on ubuntu nor rockylinux is supported"
+	}
+}
+if ($BuildahImage) {
+	if ($Archlinux) {
+		Write-Host ":: Podman image generation enabled"
+		$env:PKR_VAR_buildahimage = "true"
+	} else {
+		Write-Host ":: Podman image on ubuntu nor rockylinux is supported"
 	}
 }
 Write-Host ":: Stage name is $($StageName)"

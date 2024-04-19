@@ -88,6 +88,11 @@ variable "pxeimage" {
   default = false
 }
 
+variable "buildahimage" {
+  type    = bool
+  default = false
+}
+
 variable "stage" {
   type    = string
   default = "graphical"
@@ -122,39 +127,40 @@ source "null" "default" {
 
 
 source "qemu" "default" {
-  shutdown_command   = "/sbin/poweroff"
-  cd_files           = ["CIDATA/*"]
-  cd_label           = "CIDATA"
-  disk_size          = 524288
-  memory             = var.memory
-  format             = "qcow2"
-  accelerator        = "kvm"
-  disk_discard       = "unmap"
-  disk_detect_zeroes = "unmap"
-  disk_interface     = "virtio"
-  disk_compression   = false
-  skip_compaction    = true
-  net_device         = "virtio-net"
-  vga                = "virtio"
-  machine_type       = "q35"
-  cpu_model          = "host"
-  vtpm               = true
-  tpm_device_type    = "tpm-tis"
-  efi_boot           = true
-  efi_firmware_code  = "/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd"
-  efi_firmware_vars  = "/usr/share/OVMF/x64/OVMF_VARS.4m.fd"
-  sockets            = 1
-  cores              = var.cpu_cores
-  threads            = 1
-  qemuargs           = [["-rtc", "base=utc,clock=host"], ["-usbdevice", "mouse"], ["-usbdevice", "keyboard"], ["-virtfs", "local,path=output,mount_tag=host.0,security_model=mapped,id=host.0"]]
-  headless           = var.headless
-  iso_checksum       = "none"
-  iso_url            = "archlinux-${var.yearmonthday}-x86_64.iso"
-  output_directory   = "output/${var.build_arch}-${var.stage}"
-  ssh_username       = "root"
-  ssh_password       = "packer-build-passwd"
-  ssh_timeout        = "10m"
-  vm_name            = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2"
+  shutdown_command     = "/sbin/poweroff"
+  cd_files             = ["CIDATA/*"]
+  cd_label             = "CIDATA"
+  disk_size            = 524288
+  disk_additional_size = var.buildahimage ? [ "65535M" ] : []
+  memory               = var.memory
+  format               = "qcow2"
+  accelerator          = "kvm"
+  disk_discard         = "unmap"
+  disk_detect_zeroes   = "unmap"
+  disk_interface       = "virtio"
+  disk_compression     = false
+  skip_compaction      = true
+  net_device           = "virtio-net"
+  vga                  = "virtio"
+  machine_type         = "q35"
+  cpu_model            = "host"
+  vtpm                 = true
+  tpm_device_type      = "tpm-tis"
+  efi_boot             = true
+  efi_firmware_code    = "/usr/share/OVMF/x64/OVMF_CODE.secboot.4m.fd"
+  efi_firmware_vars    = "/usr/share/OVMF/x64/OVMF_VARS.4m.fd"
+  sockets              = 1
+  cores                = var.cpu_cores
+  threads              = 1
+  qemuargs             = [["-rtc", "base=utc,clock=host"], ["-usbdevice", "mouse"], ["-usbdevice", "keyboard"], ["-virtfs", "local,path=output,mount_tag=host.0,security_model=mapped,id=host.0"]]
+  headless             = var.headless
+  iso_checksum         = "none"
+  iso_url              = "archlinux-${var.yearmonthday}-x86_64.iso"
+  output_directory     = "output/${var.build_arch}-${var.stage}"
+  ssh_username         = "root"
+  ssh_password         = "packer-build-passwd"
+  ssh_timeout          = "10m"
+  vm_name              = "wildcardos-${var.build_arch}-${var.stage}-${var.yearmonthday}-x86_64.qcow2"
 }
 
 
@@ -205,7 +211,7 @@ build {
     inline = [
       "pushd /install",
       "  chmod a+x main.sh",
-      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.bootstrap ? "bootstrap" : ""},${var.cinnamon ? "graphical,cinnamon" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeserve ? "pxeserve" : ""},${var.pxeimage ? "pxeimage" : ""},${join(",", var.configuration)}'",
+      "  ./main.sh -a -d ${source.type == "qemu" ? "/dev/vda" : "/dev/sda"} -m /var/lib/machines/${var.build_arch} ${var.verbose ? "-v" : ""} -t '${var.build_arch},${var.encryption ? "encryption" : ""},${var.dualboot ? "dualboot" : ""},${var.bootstrap ? "bootstrap" : ""},${var.cinnamon ? "graphical,cinnamon" : ""},${var.pxeboot ? "pxeboot" : ""},${var.pxeserve ? "pxeserve" : ""},${var.pxeimage ? "pxeimage" : ""},${var.buildahimage ? "buildahimage" : ""},${join(",", var.configuration)}' ${var.buildahimage ? "-b /dev/vdb" : ""}",
       "popd"
     ]
   }
