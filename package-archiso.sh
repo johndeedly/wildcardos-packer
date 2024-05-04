@@ -25,10 +25,11 @@ ARCHISOHASH=$(curl -sL "http://ftp.halifax.rwth-aachen.de/archlinux/iso/${ARCHIS
 
 if ! [ -f "archlinux-${ARCHISODATE}-x86_64.iso" ]; then
     log_text "Downloading archlinux-${ARCHISODATE}-x86_64.iso"
-    if ! wget -o "archlinux-${ARCHISODATE}-x86_64.iso" "http://ftp.halifax.rwth-aachen.de/archlinux/iso/${ARCHISODATE}/archlinux-${ARCHISODATE}-x86_64.iso"; then
+    if ! wget --referer="http://ftp.halifax.rwth-aachen.de/archlinux/iso/${ARCHISODATE}/" --user-agent="Mozilla/999.0 (X11; Linux x86_64) AppleWebKit/999.0 (KHTML, like Gecko) Chrome/999.0 Firefox/999.0 Safari/999.0" "http://ftp.halifax.rwth-aachen.de/archlinux/iso/${ARCHISODATE}/archlinux-${ARCHISODATE}-x86_64.iso"; then
         log_error "Download error"
         exit 1
     fi
+    sync
 fi
 
 log_text "Validate checksum of archlinux-${ARCHISODATE}-x86_64.iso"
@@ -39,21 +40,29 @@ fi
 
 ARCHISOMODDED="archlinux-${ARCHISODATE}-x86_64-with-cidata-and-install-scripts.iso"
 [ -f output/cloud-init.img ] && rm output/cloud-init.img
+[ -f output/install.img ] && rm output/install.img
 [ -f "output/${ARCHISOMODDED}" ] && rm "output/${ARCHISOMODDED}"
 
 log_text "Create CIDATA image to append it to the archiso image"
-mkfs.fat -C -n CIDATA output/cloud-init.img 2048
-mcopy -i output/cloud-init.img CIDATA/meta-data CIDATA/user-data CIDATA/network-config ::
+xorriso -volid "CIDATA" \
+        -outdev "output/cloud-init.img" \
+        -map CIDATA/meta-data /meta-data \
+        -map CIDATA/network-config /network-config \
+        -map CIDATA/user-data /user-data
+
+log_text "Create INSTALL image to append it to the archiso image"
+xorriso -volid "INSTALL" \
+        -outdev "output/install.img" \
+        -map install /install/ \
+        -map packer /packer/ \
+        -map LICENSE /LICENSE \
+        -map pipeline.bat /pipeline.bat \
+        -map pipeline.ps1 /pipeline.ps1 \
+        -map pipeline.sh /pipeline.sh
 
 log_text "Create the modified archiso image"
 xorriso -indev "archlinux-${ARCHISODATE}-x86_64.iso" \
         -outdev "output/${ARCHISOMODDED}" \
-        -append_partition 3 0x0c output/cloud-init.img \
-        -map CIDATA /wildcard-os/CIDATA/ \
-        -map install /wildcard-os/install/ \
-        -map packer /wildcard-os/packer/ \
-        -map LICENSE /wildcard-os/LICENSE \
-        -map pipeline.bat /wildcard-os/pipeline.bat \
-        -map pipeline.ps1 /wildcard-os/pipeline.ps1 \
-        -map pipeline.sh /wildcard-os/pipeline.sh \
+        -append_partition 3 0x83 output/cloud-init.img \
+        -append_partition 4 0x83 output/install.img \
         -boot_image any replay
