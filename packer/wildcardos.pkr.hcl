@@ -128,7 +128,7 @@ source "null" "default" {
 
 source "qemu" "default" {
   shutdown_command     = "/sbin/poweroff"
-  cd_files             = ["CIDATA/*"]
+  cd_files             = [ "CIDATA/*", "install/*" ]
   cd_label             = "CIDATA"
   disk_size            = 524288
   disk_additional_size = var.buildahimage ? [ "65535M" ] : []
@@ -194,17 +194,14 @@ source "virtualbox-iso" "default" {
 build {
   sources = ["source.null.default", "source.qemu.default", "source.virtualbox-iso.default"]
 
-  # create the script build folder
+  # check the script build folder is present
   provisioner "shell" {
+    pause_before = "10s"
+    timeout      = "10s"
+    max_retries  = 20
     inline = [
-      "mkdir -m755 /install",
+      "test -d /install"
     ]
-  }
-
-  # trailing slash: content of installation dir is copied to the /install folder
-  provisioner "file" {
-    source      = "install/"
-    destination = "/install"
   }
 
   provisioner "shell" {

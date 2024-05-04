@@ -24,6 +24,10 @@ bootcmd:
   # time travel the repositories back to the build day of the iso
   # the path year/month/day is resolved through the file "/version" in the archiso ram fs
   - echo "Server=https://archive.archlinux.org/repos/$(head -1 /version | sed -e 's|\.|/|g')/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+  # prepare first boot commands
+  - mkdir -p /var/lib/cloud/scripts/per-boot
+  # load the german keyboard layout for the current session
+  - loadkeys de-latin1
 
 ### second command to execute in cloud-init execution order
 write_files:
@@ -35,8 +39,44 @@ write_files:
       XKBMODEL=pc105
     owner: 'root:root'
     permissions: '0644'
+  # first boot commands
+  - path: /var/lib/cloud/scripts/per-boot/00_firstboot.sh
+    content: |
+      #!/usr/bin/env bash
 
-### third command to execute in cloud-init execution order
-runcmd:
-  # load the german keyboard layout for the current session
-  - loadkeys de-latin1
+      # prevent bootcmd from running multiple times
+      if [ -f /cidata_firstboot ]; then
+        exit 0
+      fi
+      touch /cidata_firstboot
+      
+      exec 2>&1 &> >(while read -r line; do echo -e "[$(cat /proc/uptime | cut -d' ' -f1)] $line" | tee -a /cidata_log > /dev/tty1; done)
+      
+      # search for the INSTALL or CIDATA drive in this order, mount it and copy everything to the ramdrive
+      TARGET_DEVICE=$(lsblk -nidyo PATH,LABEL,FSTYPE | sed -e '/INSTALL/!d' -e '/iso9660/!d' | head -1 | cut -d' ' -f1)
+      if [ -z "$TARGET_DEVICE" ]; then
+        TARGET_DEVICE=$(lsblk -nidyo PATH,LABEL,FSTYPE | sed -e '/CIDATA/!d' -e '/iso9660/!d' | head -1 | cut -d' ' -f1)
+      fi
+      # mount step
+      if [ -n "$TARGET_DEVICE" ]; then
+        mount "$TARGET_DEVICE" /mnt
+      else
+        echo "no_cidata_or_install_device" > /cidata_firstboot
+        exit 0
+      fi
+      # copy step
+      if mountpoint -q -- /mnt; then
+        mkdir /install_cp
+        cp -r /mnt/* /install_cp/
+        sync
+        umount /mnt || true
+        mv /install_cp /install
+      else
+        echo "no_cidata_mount" > /cidata_firstboot
+        exit 0
+      fi
+      
+      # write status
+      echo "complete" > /cidata_firstboot
+    owner: 'root:root'
+    permissions: '0755'
