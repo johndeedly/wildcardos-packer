@@ -79,7 +79,7 @@ PACKAGE_LIST=(
     drawio-desktop
     code
     # easy package management
-    pamac-nosnap
+    pamac-flatpak
     flatpak
 )
 
