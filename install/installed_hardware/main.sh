@@ -20,14 +20,8 @@ CPU_HITS=$(echo ${LSHW} | xmllint --xpath '//node[@class="processor"]/vendor/tex
 log_text "Get gpu vendors"
 GPU_HITS=$(echo ${LSHW} | xmllint --xpath '//node[@class="display"]/vendor/text()' -)
 
-log_text "Count qemu vendors"
-QEMU_HITS=$(echo ${LSHW} | xmllint --xpath 'count(//vendor[contains(.,"QEMU")])' -)
-
-log_text "Count vmware vendors"
-VMWARE_HITS=$(echo ${LSHW} | xmllint --xpath 'count(//vendor[contains(.,"VMware")])' -)
-
-log_text "Count oracle vendors"
-ORACLE_HITS=$(echo ${LSHW} | xmllint --xpath 'count(//vendor[contains(.,"Oracle")])' -)
+log_text "Detect virtual environment"
+VIRT_ENV=$(systemd-detect-virt)
 
 log_text "Store results in variables"
 INSTALLED_HARDWARE_WIRELESS=""
@@ -51,19 +45,19 @@ if [ "x${GPU_HITS[@]}" != "x" ]; then
     done
 fi
 INSTALLED_HARDWARE_QEMU=""
-if [ $QEMU_HITS -gt 0 ]; then
+if [ "$VIRT_ENV" == "qemu" ] || [ "$VIRT_ENV" == "kvm" ]; then
     INSTALLED_HARDWARE_QEMU="YES"
 fi
 INSTALLED_HARDWARE_VMWARE=""
-if [ $VMWARE_HITS -gt 0 ]; then
+if [ "$VIRT_ENV" == "vmware" ] || [ "$VIRT_ENV" == "broadcom" ]; then
     INSTALLED_HARDWARE_VMWARE="YES"
 fi
 INSTALLED_HARDWARE_VIRTUALBOX=""
-if [ $ORACLE_HITS -gt 0 ]; then
+if [ "$VIRT_ENV" == "oracle" ]; then
     INSTALLED_HARDWARE_VIRTUALBOX="YES"
 fi
 INSTALLED_HARDWARE_VIRTUAL_MACHINE=""
-if [ $QEMU_HITS -gt 0 ] || [ $VMWARE_HITS -gt 0 ] || [ $ORACLE_HITS -gt 0 ]; then
+if [ "$VIRT_ENV" != "none" ]; then
     INSTALLED_HARDWARE_VIRTUAL_MACHINE="YES"
 fi
 INSTALLED_HARDWARE_CPU_AMD=""

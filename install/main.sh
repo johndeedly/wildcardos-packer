@@ -105,9 +105,9 @@ if [ -n "$VERBOSE" ]; then
     echo "AMD gpu:      $INSTALLED_HARDWARE_GPU_AMD"
     echo "Intel gpu:    $INSTALLED_HARDWARE_GPU_INTEL"
     echo "Nvidia gpu:   $INSTALLED_HARDWARE_GPU_NVIDIA"
-    echo "QEMU hits:    $QEMU_HITS"
-    echo "VMware hits:  $VMWARE_HITS"
-    echo "Oracle hits:  $ORACLE_HITS"
+    echo "QEMU:         $INSTALLED_HARDWARE_QEMU"
+    echo "VMware:       $INSTALLED_HARDWARE_VMWARE"
+    echo "Virtualbox:   $INSTALLED_HARDWARE_VIRTUALBOX"
     echo "Virt system:  $INSTALLED_HARDWARE_VIRTUAL_MACHINE"
 fi
 
